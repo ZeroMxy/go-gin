@@ -10,7 +10,7 @@
 ### 运行
 > 安装并初始化
 ```
-git clone git@github.com:ZeroMxy/zero-go.git
+git clone git@github.com:ZeroMxy/go-gin.git
 go mod tidy
 ```
 > 创建配置文件
