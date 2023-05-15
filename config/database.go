@@ -11,5 +11,5 @@ var Database = map[string]interface{} {
 	"password":        Env("database.password", "root"),
 	"maxIdleConns":    Env("database.maxIdleConns", ""),
 	"maxOpenConns":    Env("database.maxOpenConns", ""),
-	"connMaxLifetime": Env("database.password", ""),
+	"connMaxLifetime": Env("database.connMaxLifetime", ""),
 }
