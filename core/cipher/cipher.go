@@ -10,7 +10,7 @@ type Cipher struct{}
 
 // Password encryption
 // 密码加密
-func Encrypt(param string) string {
+func Encrypt (param string) string {
 
 	paramByte := []byte(param)
 	paramHash, hashErr := bcrypt.GenerateFromPassword(paramByte, bcrypt.MinCost)
@@ -24,7 +24,7 @@ func Encrypt(param string) string {
 
 // Authentication password
 // 验证密码
-func Verify(paramEncrypted, param string) bool {
+func Verify (paramEncrypted, param string) bool {
 
 	paramEncryptedByte := []byte(paramEncrypted)
 	paramByte := []byte(param)

@@ -35,7 +35,7 @@ var (
 
 // Generate an id for external invocation
 // 生成 id 供外部调用
-func GetId() int64 {
+func GetId () int64 {
 
 	mutex.Lock()
 	defer mutex.Unlock()
@@ -53,7 +53,7 @@ func GetId() int64 {
 
 // Create id
 // 创建 id
-func createId() int64 {
+func createId () int64 {
 
 	milliseconds := getMillisecond()
 	if milliseconds < timestamp {
@@ -78,6 +78,6 @@ func createId() int64 {
 
 // Get current millisecond
 // 获取当前毫秒数
-func getMillisecond() int64 {
+func getMillisecond () int64 {
 	return time.Now().UnixNano() / 1e6
 }

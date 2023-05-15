@@ -10,7 +10,7 @@ import (
 
 type ToolController struct {}
 
-func (*ToolController) Captcha(context *gin.Context) {
+func (*ToolController) Captcha (context *gin.Context) {
 
 	base64Captcha, captcha := captcha.Create(context, "storage/font/Zaio.ttf")
 

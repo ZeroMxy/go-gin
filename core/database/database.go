@@ -20,14 +20,14 @@ var (
 	err  error
 )
 
-func Conn() *xorm.Engine {
+func Conn () *xorm.Engine {
 	once.Do(func() {
 		new()
 	})
 	return conn
 }
 
-func new() {
+func new () {
 
 	switch config.Database["drive"].(string) {
 	case "mysql":
@@ -58,7 +58,7 @@ func new() {
 
 // mysql connects to the database
 // mysql 连接数据库
-func mysqlConnection() (*xorm.Engine, error) {
+func mysqlConnection () (*xorm.Engine, error) {
 
 	host := config.Database["host"]
 	port := config.Database["port"]
@@ -76,7 +76,7 @@ func mysqlConnection() (*xorm.Engine, error) {
 
 // postgres connects to the database
 // postgres 连接数据库
-func postgresConnection() (*xorm.Engine, error) {
+func postgresConnection () (*xorm.Engine, error) {
 
 	host := config.Database["host"]
 	port := config.Database["port"]

@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ToolRoute(app *gin.Engine) {
+func ToolRoute (app *gin.Engine) {
 
 	toolApp := app.Group("")
 

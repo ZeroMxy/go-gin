@@ -16,7 +16,7 @@ type Captcha struct {}
 
 // Create a graphic verification code
 // 创建图形验证码
-func Create(context *gin.Context, fontPath string) (string, string) {
+func Create (context *gin.Context, fontPath string) (string, string) {
 
 	captchaObject := captcha.New()
 	captchaObject.SetFont(fontPath)
@@ -40,7 +40,7 @@ func Create(context *gin.Context, fontPath string) (string, string) {
 
 // Verify the graphic verification code
 // 验证图形验证码
-func Verify(context *gin.Context, captcha string) bool {
+func Verify (context *gin.Context, captcha string) bool {
 
 	sessionCaptcha := session.Get("captcha")
 	if sessionCaptcha == "" || sessionCaptcha != captcha {

@@ -16,7 +16,7 @@ import (
 
 type App struct{}
 
-func (*App) Run() {
+func (*App) Run () {
 
 	// Example Initialize the log
 	// 初始化日志

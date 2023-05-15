@@ -18,7 +18,7 @@ type FormatTime time.Time
 
 // Model time format conversion
 // 模型时间格式转换
-func (this FormatTime) MarshalJSON() ([]byte, error) {
+func (this FormatTime) MarshalJSON () ([]byte, error) {
 
 	// Special handling is required when the return time is null
 	// 当返回时间为空时，需要进行特殊处理
@@ -31,7 +31,7 @@ func (this FormatTime) MarshalJSON() ([]byte, error) {
 
 // Database instance
 // 数据库实例
-func DB() *xorm.Engine {
+func DB () *xorm.Engine {
 	conn := database.Conn()
 	return conn
 }
