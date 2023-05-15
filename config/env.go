@@ -7,7 +7,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func Env(name string, defaultValue interface{}) interface{} {
+func Env (name string, defaultValue interface{}) interface{} {
 
 	env, err := ioutil.ReadFile("env.yaml")
 	if err != nil {
@@ -28,7 +28,7 @@ func Env(name string, defaultValue interface{}) interface{} {
 }
 
 // 递归获取值
-func getValue(name string, configs map[string]interface{}) interface{} {
+func getValue (name string, configs map[string]interface{}) interface{} {
 
 	names := strings.Split(name, ".")
 	length := len(names)
