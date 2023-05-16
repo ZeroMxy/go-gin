@@ -32,6 +32,7 @@ func (this FormatTime) MarshalJSON () ([]byte, error) {
 // Database instance
 // 数据库实例
 func DB () *xorm.Engine {
+	
 	conn := database.Conn()
 	return conn
 }

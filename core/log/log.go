@@ -2,6 +2,7 @@ package log
 
 import (
 	"go-gin/config"
+	"sync"
 
 	"github.com/gookit/slog"
 	"github.com/gookit/slog/handler"
@@ -10,39 +11,67 @@ import (
 
 type Log struct {}
 
-var log = &slog.Logger{}
-
-func Init () {
-	log = newLogger()
-	return
-}
+var (
+	log = &slog.Logger{}
+	once sync.Once
+)
 
 func Debug (message ...interface{}) {
+
+	once.Do(func () {
+		new()
+	})
+
 	log.Debug(message)
 	return
 }
 
 func Info (message ...interface{}) {
+
+	once.Do(func () {
+		new()
+	})
+
 	log.Info(message)
 	return
 }
 
 func Error (message ...interface{}) {
+
+	once.Do(func () {
+		new()
+	})
+
 	log.Error(message)
 	return
 }
 
 func Debugf (format string, message ...interface{}) {
+
+	once.Do(func () {
+		new()
+	})
+
 	log.Debugf(format, message)
 	return
 }
 
 func Infof (format string, message ...interface{}) {
+
+	once.Do(func () {
+		new()
+	})
+
 	log.Infof(format, message)
 	return
 }
 
 func Errorf (format string, message ...interface{}) {
+
+	once.Do(func () {
+		new()
+	})
+	
 	log.Errorf(format, message)
 	return
 }
@@ -69,7 +98,7 @@ func InitSystemLog () *rotatefile.Writer {
 	return systemLog
 }
 
-func newLogger () *slog.Logger {
+func new () {
 
 	template := "[{{datetime}}] [{{level}}] [{{caller}}] {{message}}\n"
 
@@ -78,7 +107,7 @@ func newLogger () *slog.Logger {
 		path = "storage/log/zero.log"
 	}
 
-	return slog.New().Configure(
+	log = slog.New().Configure(
 		func(slogger *slog.Logger) {
 			// reset
 			slogger.ResetProcessors()
@@ -96,4 +125,5 @@ func newLogger () *slog.Logger {
 			slogger.PushHandler(fileHandler)
 		},
 	)
+	return
 }

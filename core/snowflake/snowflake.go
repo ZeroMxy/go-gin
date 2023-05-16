@@ -36,7 +36,7 @@ var (
 // Generate an id for external invocation
 // 生成 id 供外部调用
 func GetId () int64 {
-
+	
 	mutex.Lock()
 	defer mutex.Unlock()
 

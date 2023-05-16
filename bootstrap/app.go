@@ -18,10 +18,6 @@ type App struct{}
 
 func (*App) Run () {
 
-	// Example Initialize the log
-	// 初始化日志
-	log.Init()
-
 	// Initialize gin
 	// 初始化 gin
 	app := gin.New()

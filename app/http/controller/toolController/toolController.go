@@ -21,6 +21,5 @@ func (*ToolController) Captcha (context *gin.Context) {
 	})
 
 	return
-
 }
 

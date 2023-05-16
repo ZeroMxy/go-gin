@@ -7,11 +7,11 @@ import (
 )
 
 func ToolRoute (app *gin.Engine) {
-
+	
 	toolApp := app.Group("")
 
 	{
 		toolApp.GET("tool/captcha", (&toolController.ToolController{}).Captcha)
 	}
-
+	return
 }

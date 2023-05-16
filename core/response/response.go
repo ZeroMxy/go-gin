@@ -19,9 +19,8 @@ var (
 // Response successful
 // 响应成功
 func Success (context *gin.Context, data interface{}) {
-
+	
 	Result(context, SUCCESS, "ok", data)
-
 	return
 }
 
@@ -30,7 +29,6 @@ func Success (context *gin.Context, data interface{}) {
 func Fail (context *gin.Context, message string) {
 
 	Result(context, FAIL, message, nil)
-
 	return
 }
 
@@ -39,7 +37,6 @@ func Fail (context *gin.Context, message string) {
 func TokenFail (context *gin.Context) {
 
 	Result(context, TOKEN_FAIL, "Invalid token", nil)
-
 	return
 }
 
@@ -51,9 +48,7 @@ func Pager (context *gin.Context, data interface{}, total, current, size int) {
 		"current": current,
 		"size":    size,
 	}
-
 	Result(context, SUCCESS, "ok", data)
-
 	return
 }
 
@@ -66,6 +61,5 @@ func Result (context *gin.Context, code int, message string, data interface{}) {
 		"message": message,
 		"data":    data,
 	})
-
 	return
 }
