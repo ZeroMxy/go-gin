@@ -8,10 +8,10 @@ import (
 
 func ToolRoute (app *gin.Engine) {
 	
-	toolApp := app.Group("")
+	toolApp := app.Group("tool")
 
 	{
-		toolApp.GET("tool/captcha", (&toolController.ToolController{}).Captcha)
+		toolApp.GET("captcha", (&toolController.ToolController{}).Captcha)
 	}
 	return
 }

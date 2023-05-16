@@ -2,8 +2,8 @@ package toolController
 
 import (
 	"go-gin/core/captcha"
+	"go-gin/core/log"
 	"go-gin/core/response"
-	"go-gin/core/session"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +14,7 @@ func (*ToolController) Captcha (context *gin.Context) {
 
 	base64Captcha, captcha := captcha.Create(context, "storage/font/Zaio.ttf")
 
-	session.Set("captcha", captcha)
+	log.Info(captcha)
 
 	response.Success(context, map[string] string {
 		"captcha": base64Captcha,
