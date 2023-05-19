@@ -1,15 +1,17 @@
 package config
 
-var Database = map[string]interface{} {
+import "go-gin/core/env"
+
+var Database = map[string]string{
 
 	// Database
-	"drive":           Env("database.drive", "mysql"),
-	"host":            Env("database.host", "localhost"),
-	"port":            Env("database.port", "3306"),
-	"dbname":          Env("database.dbname", "basic"),
-	"username":        Env("database.username", "root"),
-	"password":        Env("database.password", "root"),
-	"maxIdleConns":    Env("database.maxIdleConns", ""),
-	"maxOpenConns":    Env("database.maxOpenConns", ""),
-	"connMaxLifetime": Env("database.connMaxLifetime", ""),
+	"drive":           env.Get("database.drive", "mysql"),
+	"host":            env.Get("database.host", "localhost"),
+	"port":            env.Get("database.port", "3306"),
+	"dbname":          env.Get("database.dbname", "basic"),
+	"username":        env.Get("database.username", "root"),
+	"password":        env.Get("database.password", "root"),
+	"maxIdleConns":    env.Get("database.maxIdleConns", ""),
+	"maxOpenConns":    env.Get("database.maxOpenConns", ""),
+	"connMaxLifetime": env.Get("database.connMaxLifetime", ""),
 }

@@ -29,6 +29,6 @@ func Local (context *gin.Context, file *multipart.FileHeader) string {
 
 	context.SaveUploadedFile(file, filePath)
 
-	return config.App["host"].(string) + filePath
+	return config.App["host"] + filePath
 }
 

@@ -1,13 +1,16 @@
 package database
 
 import (
-	"fmt"
 	"go-gin/config"
 	"go-gin/core/log"
+	"strconv"
 	"sync"
+	"time"
 
+	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
+	_ "github.com/mattn/go-oci8"
 	"xorm.io/xorm"
 	"xorm.io/xorm/names"
 )
@@ -30,26 +33,37 @@ func Conn () *xorm.Engine {
 
 func new () {
 
-	switch config.Database["drive"].(string) {
+	switch config.Database["drive"] {
 	case "mysql":
-		conn, err = mysqlConnection()
+		conn, err = mysqlConn()
 	case "postgres":
-		conn, err = postgresConnection()
+		conn, err = postgresConn()
+	case "mssql":
+		conn, err = mssqlConn()
+	case "oracle":
+		conn, err = oracleConn()
 	default:
-		conn, err = mysqlConnection()
+		conn, err = mysqlConn()
 	}
 
 	if err != nil {
 		log.Error(err)
 		return
 	}
-	
-	if maxIdleConns := config.Database["maxIdleConns"]; maxIdleConns != nil {
-		conn.SetMaxIdleConns(maxIdleConns.(int))
+
+	maxIdleConns, err := strconv.Atoi(config.Database["maxIdleConns"])
+	if err != nil {
+		conn.SetMaxIdleConns(maxIdleConns)
 	}
 
-	if maxOpenConns := config.Database["maxOpenConns"]; maxOpenConns != nil {
-		conn.SetMaxOpenConns(maxOpenConns.(int))
+	maxOpenConns, err := strconv.Atoi(config.Database["maxOpenConns"])
+	if err != nil {
+		conn.SetMaxOpenConns(maxOpenConns)
+	}
+
+	connMaxLifetime, err := time.ParseDuration(config.Database["connMaxLifetime"])
+	if err != nil {
+		conn.SetConnMaxLifetime(connMaxLifetime)
 	}
 
 	conn.SetMapper(names.SameMapper{})
@@ -59,7 +73,7 @@ func new () {
 
 // mysql connects to the database
 // mysql 连接数据库
-func mysqlConnection () (*xorm.Engine, error) {
+func mysqlConn () (*xorm.Engine, error) {
 
 	host := config.Database["host"]
 	port := config.Database["port"]
@@ -67,17 +81,15 @@ func mysqlConnection () (*xorm.Engine, error) {
 	username := config.Database["username"]
 	password := config.Database["password"]
 
-	dsn := fmt.Sprintf(
-		"%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
-		username, password, host, port, dbname,
-	)
+	// dsn := "username:password@tcp(host:port)/dbname?charset=utf8&parseTime=True&loc=Local"
+	dsn := username + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbname + "?charset=utf8&parseTime=True&loc=Local"
 
 	return xorm.NewEngine("mysql", dsn)
 }
 
 // postgres connects to the database
 // postgres 连接数据库
-func postgresConnection () (*xorm.Engine, error) {
+func postgresConn () (*xorm.Engine, error) {
 
 	host := config.Database["host"]
 	port := config.Database["port"]
@@ -85,10 +97,40 @@ func postgresConnection () (*xorm.Engine, error) {
 	username := config.Database["username"]
 	password := config.Database["password"]
 
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai",
-		host, username, password, dbname, port,
-	)
+	// dsn := "host=host user=username password=password dbname=dbname port=port sslmode=disable"
+	dsn := "host=" + host + " user=" + username + " password=" + password + " dbname=" + dbname + " port=" + port + "sslmode=disable"
 
 	return xorm.NewEngine("postgres", dsn)
+}
+
+// mssql connects to the database
+// mssql 连接数据库
+func mssqlConn () (*xorm.Engine, error) {
+
+	host := config.Database["host"]
+	port := config.Database["port"]
+	dbname := config.Database["dbname"]
+	username := config.Database["username"]
+	password := config.Database["password"]
+
+	// dsn := "server=host;port=port;database=dbname;user id=username;password=password"
+	dsn := "server=" + host + ";port=" + port + ";database=" + dbname+ ";user id=" + username + ";password=" + password
+
+	return xorm.NewEngine("mssql", dsn)
+}
+
+// oracle connects to the database
+// oracle 连接数据库
+func oracleConn () (*xorm.Engine, error) {
+
+	host := config.Database["host"]
+	port := config.Database["port"]
+	dbname := config.Database["dbname"]
+	username := config.Database["username"]
+	password := config.Database["password"]
+
+	// dsn := "username/password@host:port/dbname"
+	dsn := username + "/" + password + "@" + host + ":" + port + "/" + dbname
+
+	return xorm.NewEngine("oci8", dsn)
 }

@@ -80,7 +80,7 @@ func Errorf (format string, message ...interface{}) {
 // 初始化系统日志
 func InitSystemLog () *rotatefile.Writer {
 
-	system := config.Log["system"].(string)
+	system := config.Log["system"]
 	if system == "" {
 		system = "storage/log/system.log"
 	}
@@ -102,7 +102,7 @@ func new () {
 
 	template := "[{{datetime}}] [{{level}}] [{{caller}}] {{message}}\n"
 
-	path := config.Log["path"].(string)
+	path := config.Log["path"]
 	if path == "" {
 		path = "storage/log/zero.log"
 	}

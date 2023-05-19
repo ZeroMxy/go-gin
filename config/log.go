@@ -1,7 +1,9 @@
 package config
 
-var Log = map[string]interface{} {
+import "go-gin/core/env"
+
+var Log = map[string]string{
 
 	// Log
-	"path": Env("log.logic", "storage/log/logic.log"),
+	"path": env.Get("log.logic", "storage/log/logic.log"),
 }

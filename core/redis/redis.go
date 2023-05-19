@@ -1,8 +1,8 @@
 package redis
 
 import (
-	"fmt"
 	"go-gin/config"
+	"strconv"
 	"sync"
 
 	"github.com/go-redis/redis/v8"
@@ -25,10 +25,15 @@ func Conn () *redis.Client {
 
 func new () {
 
+	dbname, err := strconv.Atoi(config.Redis["dbname"])
+	if err != nil {
+		dbname = 0
+	}
+
 	conn = redis.NewClient(&redis.Options {
-		Addr:     fmt.Sprintf("%s:%d", config.Redis["host"], config.Redis["port"]),
-		Password: config.Redis["password"].(string),
-		DB:       config.Redis["dbname"].(int),
+		Addr:     config.Redis["host"] + ":" + config.Redis["port"],
+		Password: config.Redis["password"],
+		DB:       dbname,
 	})
 	return
 }

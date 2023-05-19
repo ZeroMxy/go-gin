@@ -37,7 +37,7 @@ func (*App) Run () {
 	// Start http service
 	// 启动 http 服务
 	server := &http.Server {
-		Addr: config.App["host"].(string),
+		Addr: config.App["host"],
 		Handler: app,
 		ReadTimeout: time.Second * 10,
 		WriteTimeout: time.Second * 10,

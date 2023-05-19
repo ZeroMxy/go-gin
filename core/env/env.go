@@ -1,13 +1,18 @@
-package config
+package env
 
 import (
+	"fmt"
 	"io/ioutil"
 	"strings"
 
 	"gopkg.in/yaml.v3"
 )
 
-func Env (name string, defaultValue interface{}) interface{} {
+func Get (name, defaultValue string) string {
+	return fmt.Sprint(env(name, defaultValue))
+}
+
+func env (name string, defaultValue interface{}) interface{} {
 
 	env, err := ioutil.ReadFile("env.yaml")
 	if err != nil {
@@ -19,16 +24,12 @@ func Env (name string, defaultValue interface{}) interface{} {
 		panic("Configuration file parsing failed Procedure")
 	}
 
-	value := getValue(name, config)
-	if value == "" {
-		value = defaultValue
-	}
+	value := read(name, config)
 
 	return value
 }
 
-// 递归获取值
-func getValue (name string, configs map[string]interface{}) interface{} {
+func read (name string, configs map[string]interface{}) interface{} {
 
 	names := strings.Split(name, ".")
 	length := len(names)

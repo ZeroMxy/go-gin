@@ -3,6 +3,7 @@ package snowflake
 import (
 	"go-gin/config"
 	"go-gin/core/log"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -40,8 +41,8 @@ func GetId () int64 {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	machineId = config.App["machineId"].(int64)
-	startTime = config.App["startTime"].(int64)
+	machineId, _ = strconv.ParseInt(config.App["machineId"], 10, 64)
+	startTime, _ = strconv.ParseInt(config.App["startTime"], 10, 64)
 
 	if typeCastErr != nil {
 		log.Error(typeCastErr)
