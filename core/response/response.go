@@ -18,7 +18,7 @@ var (
 
 // Response successful
 // 响应成功
-func Success (context *gin.Context, data interface{}) {
+func Success (context *gin.Context, data interface {}) {
 	
 	Result(context, SUCCESS, "ok", data)
 	return
@@ -40,9 +40,9 @@ func TokenFail (context *gin.Context) {
 	return
 }
 
-func Pager (context *gin.Context, data interface{}, total, current, size int) {
+func Pager (context *gin.Context, data interface {}, total, current, size int) {
 
-	data = map[string]interface{}{
+	data = map[string]interface {}{
 		"rows":    data,
 		"total":   total,
 		"current": current,
@@ -54,9 +54,9 @@ func Pager (context *gin.Context, data interface{}, total, current, size int) {
 
 // Response result
 // 响应结果
-func Result (context *gin.Context, code int, message string, data interface{}) {
+func Result (context *gin.Context, code int, message string, data interface {}) {
 
-	context.JSON(200, map[string]interface{}{
+	context.JSON(200, map[string]interface {}{
 		"code":    code,
 		"message": message,
 		"data":    data,

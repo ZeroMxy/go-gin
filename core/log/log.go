@@ -16,7 +16,7 @@ var (
 	once sync.Once
 )
 
-func Debug (message ...interface{}) {
+func Debug (message ...interface {}) {
 
 	once.Do(func () {
 		new()
@@ -26,7 +26,7 @@ func Debug (message ...interface{}) {
 	return
 }
 
-func Info (message ...interface{}) {
+func Info (message ...interface {}) {
 
 	once.Do(func () {
 		new()
@@ -36,7 +36,7 @@ func Info (message ...interface{}) {
 	return
 }
 
-func Error (message ...interface{}) {
+func Error (message ...interface {}) {
 
 	once.Do(func () {
 		new()
@@ -46,7 +46,7 @@ func Error (message ...interface{}) {
 	return
 }
 
-func Debugf (format string, message ...interface{}) {
+func Debugf (format string, message ...interface {}) {
 
 	once.Do(func () {
 		new()
@@ -56,7 +56,7 @@ func Debugf (format string, message ...interface{}) {
 	return
 }
 
-func Infof (format string, message ...interface{}) {
+func Infof (format string, message ...interface {}) {
 
 	once.Do(func () {
 		new()
@@ -66,7 +66,7 @@ func Infof (format string, message ...interface{}) {
 	return
 }
 
-func Errorf (format string, message ...interface{}) {
+func Errorf (format string, message ...interface {}) {
 
 	once.Do(func () {
 		new()

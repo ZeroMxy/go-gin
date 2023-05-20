@@ -9,17 +9,18 @@ import (
 )
 
 func Get (name, defaultValue string) string {
+	
 	return fmt.Sprint(env(name, defaultValue))
 }
 
-func env (name string, defaultValue interface{}) interface{} {
+func env (name string, defaultValue interface {}) interface {} {
 
 	env, err := ioutil.ReadFile("env.yaml")
 	if err != nil {
 		panic("Description Failed to read the configuration file")
 	}
 
-	var config map[string]interface{}
+	var config map[string]interface {}
 	if yaml.Unmarshal(env, &config); err != nil {
 		panic("Configuration file parsing failed Procedure")
 	}
@@ -29,7 +30,7 @@ func env (name string, defaultValue interface{}) interface{} {
 	return value
 }
 
-func read (name string, configs map[string]interface{}) interface{} {
+func read (name string, configs map[string]interface {}) interface {} {
 
 	names := strings.Split(name, ".")
 	length := len(names)
@@ -37,7 +38,7 @@ func read (name string, configs map[string]interface{}) interface{} {
 
 	for i := 1; i < length; i++ {
 
-		datas, ok := data.(map[string]interface{})
+		datas, ok := data.(map[string]interface {})
 		if !ok {
 			return ""
 		}

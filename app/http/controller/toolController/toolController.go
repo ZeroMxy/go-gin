@@ -1,7 +1,7 @@
 package toolController
 
 import (
-	"go-gin/core/captcha"
+	"go-gin/app/tool/captcha"
 	"go-gin/core/log"
 	"go-gin/core/response"
 
