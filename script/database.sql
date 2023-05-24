@@ -6,7 +6,7 @@ CREATE TABLE `user` (
   `nickname` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '昵称',
   `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '手机号',
   `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '邮箱',
-  `sex` tinyint NOT NULL DEFAULT '0' COMMENT '性别：1男；2女',
+  `gender` tinyint NOT NULL DEFAULT '0' COMMENT '性别：1男；2女',
   `age` tinyint NOT NULL DEFAULT '0' COMMENT '年龄',
   `avatar` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '头像',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态：0禁用；1启用',
