@@ -13,5 +13,6 @@ type Provider struct {}
 func (*Provider) RouteServer (app *gin.Engine) {
 	
 	router.ToolRoute(app)
+	router.AdminRoute(app)
 	return
 }

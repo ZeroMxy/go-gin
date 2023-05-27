@@ -26,6 +26,9 @@ func env (name string, defaultValue interface {}) interface {} {
 	}
 
 	value := read(name, config)
+	if value == "" {
+		value = defaultValue
+	}
 
 	return value
 }

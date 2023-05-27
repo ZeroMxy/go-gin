@@ -5,5 +5,5 @@ import "go-gin/core/env"
 var Log = map[string]string{
 
 	// Log
-	"path": env.Get("log.logic", "storage/log/logic.log"),
+	"path": env.Get("log.path", "storage/log/logic.log"),
 }

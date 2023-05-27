@@ -10,7 +10,7 @@ import (
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
-	_ "github.com/mattn/go-oci8"
+	// _ "github.com/mattn/go-oci8"
 	"xorm.io/xorm"
 	"xorm.io/xorm/names"
 )
@@ -40,8 +40,8 @@ func new () {
 		conn, err = postgresConn()
 	case "mssql":
 		conn, err = mssqlConn()
-	case "oracle":
-		conn, err = oracleConn()
+	// case "oracle":
+	// 	conn, err = oracleConn()
 	default:
 		conn, err = mysqlConn()
 	}
