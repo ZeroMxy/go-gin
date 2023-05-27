@@ -55,10 +55,10 @@ func MenuDetail (id, parentId int, name string) *admin.Menu {
 // 新增菜单
 func AddMenu (menu *admin.Menu) bool {
 
-	affected, err := model.DB().Table("menu").Insert(&menu)
-	log.Info(affected)
-	log.Info(err)
+	affected, err := model.DB().Table("menu").Insert(menu)
+
 	if err != nil || affected <= 0 {
+		log.Error(err)
 		return false
 	}
 
@@ -66,21 +66,21 @@ func AddMenu (menu *admin.Menu) bool {
 }
 
 // 修改菜单
-func UpdateMenu (menu *admin.Menu) *admin.Menu {
+func UpdateMenu (menu *admin.Menu) bool {
 
-	affected, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(&menu)
+	affected, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(menu)
 	if err != nil || affected <= 0 {
-		return nil
+		log.Error(err)
+		return false
 	}
 
-	return menu
+	return true
 }
 
 // 删除菜单
 func DelMenu (id int) bool {
 
-	var menu admin.Menu
-	affected, err := model.DB().Table("menu").Where("id = ?", id).Delete(&menu)
+	affected, err := model.DB().Table("menu").Where("id = ?", id).Delete(&admin.Menu{})
 	if err != nil || affected <= 0 {
 		return false
 	}

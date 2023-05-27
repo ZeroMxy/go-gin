@@ -3,7 +3,7 @@ package admin
 import "go-gin/app/model"
 
 type Menu struct {
-	model.Model
+	model.Model `xorm:"extends"`
 	ParentId  int    `json:"parentId"`
 	Name      string `json:"name"`
 	Type      int    `json:"type"`

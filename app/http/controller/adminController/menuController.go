@@ -28,7 +28,7 @@ func (*MenuController) MenuList (context *gin.Context) {
 // 菜单详情
 func (*MenuController) MenuDetail (context *gin.Context) {
 
-	id := context.GetInt("id")
+	id, _ := strconv.Atoi(context.Query("id"))
 
 	menu := adminService.MenuDetail(id, 0, "")
 	
@@ -76,7 +76,7 @@ func (*MenuController) AddMenu (context *gin.Context) {
 		Status: 	status,
 	})
 
-	if menu {
+	if !menu {
 		response.Fail(context, "添加失败")
 		return
 	}
@@ -88,8 +88,8 @@ func (*MenuController) AddMenu (context *gin.Context) {
 // 修改菜单
 func (*MenuController) UpdateMenu (context *gin.Context) {
 
-	status, _ 		:= strconv.Atoi(context.DefaultQuery("status", "1"))
-	parentId, _ 	:= strconv.Atoi(context.DefaultQuery("parentId", "0"))
+	status, _ 		:= strconv.Atoi(context.Query("status"))
+	parentId, _ 	:= strconv.Atoi(context.Query("parentId"))
 	id, _ 			:= strconv.Atoi(context.Query("id"))
 	name 			:= context.Query("name")
 	icon 			:= context.Query("icon")
@@ -99,22 +99,15 @@ func (*MenuController) UpdateMenu (context *gin.Context) {
 	key 			:= context.Query("key")
 	menuType, _ 	:= strconv.Atoi(context.Query("type"))
 
-	if name == "" {
-		response.Fail(context, "请添加菜单名")
-		return
-	}
-	if menuType <= 0 {
-		response.Fail(context, "请选择菜单类型")
-		return
-	}
-
-	menuInfo := adminService.MenuDetail(0, 0, name)
-	if menuInfo != nil  && menuInfo.Id != id {
-		response.Fail(context, "菜单名已存在")
-		return
+	if name != "" {
+		menuInfo := adminService.MenuDetail(0, 0, name)
+		if menuInfo != nil  && menuInfo.Id != id {
+			response.Fail(context, "菜单名已存在")
+			return
+		}
 	}
 
-	menu := adminService.UpdateMenu(&admin.Menu {
+	menu := admin.Menu {
 		ParentId: 	parentId,
 		Name: 		name,
 		Type: 		menuType,
@@ -124,9 +117,10 @@ func (*MenuController) UpdateMenu (context *gin.Context) {
 		Component: 	component,
 		Key: 		key,
 		Status: 	status,
-	})
-
-	if menu.Id <= 0 {
+	}
+	menu.Id = id
+	result := adminService.UpdateMenu(&menu)
+	if !result {
 		response.Fail(context, "更新失败")
 		return
 	}
