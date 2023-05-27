@@ -12,7 +12,7 @@ import (
 type Log struct {}
 
 var (
-	log = &slog.Logger{}
+	log = &slog.Logger {}
 	once sync.Once
 )
 

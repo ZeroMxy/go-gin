@@ -14,7 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type App struct{}
+type App struct {}
 
 func (*App) Run () {
 
@@ -32,7 +32,7 @@ func (*App) Run () {
 
 	// Load routing service
 	// 加载路由服务
-	(&provider.Provider{}).RouteServer(app)
+	(&provider.Provider {}).RouteServer(app)
 
 	// Start http service
 	// 启动 http 服务

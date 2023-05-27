@@ -6,7 +6,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type Cipher struct{}
+type Cipher struct {}
 
 // Password encryption
 // 密码加密

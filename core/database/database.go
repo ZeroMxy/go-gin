@@ -66,7 +66,7 @@ func new () {
 		conn.SetConnMaxLifetime(connMaxLifetime)
 	}
 
-	conn.SetMapper(names.SameMapper{})
+	conn.SetMapper(names.SameMapper {})
 
 	return
 }
