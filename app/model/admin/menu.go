@@ -12,6 +12,7 @@ type Menu struct {
 	Path      string `json:"path"`
 	Redirect  string `json:"redirect"`
 	Component string `json:"component"`
+	Remark    string `json:"remark"`
 	Status    int    `json:"status"`
 }
 

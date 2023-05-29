@@ -11,5 +11,6 @@ type User struct {
 	Gender   int    `json:"gender"`
 	Age      int    `json:"age"`
 	Avatar   string `json:"avatar"`
+	Remark   string `json:"remark"`
 	Status   int    `json:"status"`
 }
