@@ -5,7 +5,7 @@ type Role struct {
 	Name        string `json:"name"`
 	Mark        string `json:"mark"`
 	Sort        int    `json:"sort"`
-	Reamrk      string `json:"reamrk"`
+	Remark      string `json:"remark"`
 	Status      int    `json:"status"`
 }
 

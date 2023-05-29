@@ -48,8 +48,8 @@ func MenuDetail (id, parentId int, name string) *model.Menu {
 		menuSql.Where("name = ?", name)
 	}
 
-	result, err := menuSql.Get(&menu)
-	if err != nil || !result {
+	_, err := menuSql.Get(&menu)
+	if err != nil {
 		return nil
 	}
 
@@ -59,9 +59,8 @@ func MenuDetail (id, parentId int, name string) *model.Menu {
 // 新增菜单
 func AddMenu (menu *model.Menu) bool {
 
-	affected, err := model.DB().Table("menu").Insert(menu)
-
-	if err != nil || affected <= 0 {
+	_, err := model.DB().Table("menu").Insert(menu)
+	if err != nil {
 		log.Error(err)
 		return false
 	}
@@ -72,8 +71,8 @@ func AddMenu (menu *model.Menu) bool {
 // 修改菜单
 func UpdateMenu (menu *model.Menu) bool {
 
-	affected, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(menu)
-	if err != nil || affected <= 0 {
+	_, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(menu)
+	if err != nil {
 		log.Error(err)
 		return false
 	}
@@ -84,8 +83,8 @@ func UpdateMenu (menu *model.Menu) bool {
 // 删除菜单
 func DelMenu (id int) bool {
 
-	affected, err := model.DB().Table("menu").Where("id = ?", id).Delete(&model.Menu{})
-	if err != nil || affected <= 0 {
+	_, err := model.DB().Table("menu").Where("id = ?", id).Delete(&model.Menu{})
+	if err != nil {
 		return false
 	}
 
