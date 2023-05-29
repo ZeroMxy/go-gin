@@ -1,8 +1,7 @@
 package model
 
-type User struct {
+type Admin struct {
 	Model    `xorm:"extends"`
-	UserType int    `json:"userType"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Nickname string `json:"nickname"`

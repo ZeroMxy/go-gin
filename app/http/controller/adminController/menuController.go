@@ -1,7 +1,7 @@
 package admincontroller
 
 import (
-	"go-gin/app/model/admin"
+	"go-gin/app/model"
 	"go-gin/app/service/adminService"
 	"go-gin/core/response"
 	"strconv"
@@ -65,7 +65,7 @@ func (*MenuController) AddMenu (context *gin.Context) {
 		return
 	}
 
-	menu := adminService.AddMenu(&admin.Menu {
+	menu := adminService.AddMenu(&model.Menu {
 		ParentId: 	parentId,
 		Name: 		name,
 		Type: 		menuType,
@@ -110,7 +110,7 @@ func (*MenuController) UpdateMenu (context *gin.Context) {
 		}
 	}
 
-	menu := admin.Menu {
+	menu := model.Menu {
 		ParentId: 	parentId,
 		Name: 		name,
 		Type: 		menuType,

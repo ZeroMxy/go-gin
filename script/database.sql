@@ -1,6 +1,5 @@
-CREATE TABLE `user` (
+CREATE TABLE `admin` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `userType` tinyint DEFAULT '1' COMMENT '用户类型：1前台用户；2后台用户；',
   `username` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
   `nickname` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '昵称',
@@ -48,9 +47,9 @@ CREATE TABLE `menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='菜单表';
 
-CREATE TABLE `userHasRole` (
+CREATE TABLE `adminHasRole` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `userId` int DEFAULT '0' COMMENT '用户id',
+  `adminId` int DEFAULT '0' COMMENT '后台用户id',
   `roleId` int DEFAULT '0' COMMENT '角色id',
   `createdAt` datetime DEFAULT NULL COMMENT '创建时间',
   `updatedAt` datetime DEFAULT NULL COMMENT '更新时间',

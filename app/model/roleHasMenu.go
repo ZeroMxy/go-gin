@@ -1,9 +1,7 @@
-package admin
-
-import "go-gin/app/model"
+package model
 
 type RoleHasMenu struct {
-	model.Model `xorm:"extends"`
+	Model `xorm:"extends"`
 	RoleId int `json:"roleId"`
 	MenuId int `json:"menuId"`
 }

@@ -1,7 +1,7 @@
 package admincontroller
 
 import (
-	"go-gin/app/model/admin"
+	"go-gin/app/model"
 	"go-gin/app/service/adminService"
 	"go-gin/core/response"
 	"strconv"
@@ -19,7 +19,7 @@ func (*RoleController) RoleList (context *gin.Context) {
 	name := context.Query("name")
 	status, _ := strconv.Atoi(context.DefaultQuery("status", "-1"))
 
-	var roles []admin.Role
+	var roles []model.Role
 
 	total, _ := adminService.RoleList(name, status).Limit(size, (current - 1) * size).FindAndCount(&roles)
 

@@ -1,9 +1,8 @@
-package admin
+package model
 
-import "go-gin/app/model"
 
 type Menu struct {
-	model.Model `xorm:"extends"`
+	Model `xorm:"extends"`
 	ParentId  int    `json:"parentId"`
 	Name      string `json:"name"`
 	Type      int    `json:"type"`

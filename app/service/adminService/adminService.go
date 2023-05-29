@@ -4,7 +4,7 @@ import (
 	"go-gin/app/model"
 )
 
-type UserRoleMenus struct {
-	model.User
+type AdminRoleMenus struct {
+	model.Admin
 	RoleMenus `json:"roleMenus"`
 }

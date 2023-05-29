@@ -2,14 +2,13 @@ package adminService
 
 import (
 	"go-gin/app/model"
-	"go-gin/app/model/admin"
 	"go-gin/core/log"
 
 	"xorm.io/xorm"
 )
 
 type RoleMenus struct {
-	admin.Role
+	model.Role
 	Menus []MenuChildren `json:"menus"`
 }
 
@@ -30,9 +29,9 @@ func RoleList (name string, status int) *xorm.Session {
 }
 
 // 角色详情
-func RoleDetail (id int, name string) *admin.Role {
+func RoleDetail (id int, name string) *model.Role {
 
-	var role admin.Role
+	var role model.Role
 	roleSql := model.DB().Table("role")
 	
 	if id > 0 {
@@ -52,7 +51,7 @@ func RoleDetail (id int, name string) *admin.Role {
 }
 
 // 新增角色
-func AddRole (role *admin.Role) bool {
+func AddRole (role *model.Role) bool {
 	
 	affected, err := model.DB().Table("role").Insert(role)
 
@@ -65,7 +64,7 @@ func AddRole (role *admin.Role) bool {
 }
 
 // 修改角色
-func UpdateRole (role *admin.Role) bool {
+func UpdateRole (role *model.Role) bool {
 	
 	affected, err := model.DB().Table("role").Where("id = ?", role.Id).Update(role)
 	if err != nil || affected <= 0 {
@@ -79,7 +78,7 @@ func UpdateRole (role *admin.Role) bool {
 // 删除角色
 func DelRole (id int) bool {
 	
-	affected, err := model.DB().Table("role").Where("id = ?", id).Delete(&admin.Role{})
+	affected, err := model.DB().Table("role").Where("id = ?", id).Delete(&model.Role{})
 	if err != nil || affected <= 0 {
 		return false
 	}

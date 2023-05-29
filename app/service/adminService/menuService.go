@@ -2,19 +2,18 @@ package adminService
 
 import (
 	"go-gin/app/model"
-	"go-gin/app/model/admin"
 	"go-gin/core/log"
 )
 
 type MenuChildren struct {
-	admin.Menu
+	model.Menu
 	Children []MenuChildren `json:"children"`
 }
 
 // 菜单列表
-func MenuList (name string, status int) *[]admin.Menu {
+func MenuList (name string, status int) *[]model.Menu {
 
-	var menus []admin.Menu
+	var menus []model.Menu
 
 	menusSql := model.DB().Table("menu")
 
@@ -32,9 +31,9 @@ func MenuList (name string, status int) *[]admin.Menu {
 }
 
 // 菜单详情
-func MenuDetail (id, parentId int, name string) *admin.Menu {
+func MenuDetail (id, parentId int, name string) *model.Menu {
 
-	var menu admin.Menu
+	var menu model.Menu
 	menuSql := model.DB().Table("menu")
 
 	if id > 0 {
@@ -58,7 +57,7 @@ func MenuDetail (id, parentId int, name string) *admin.Menu {
 }
 
 // 新增菜单
-func AddMenu (menu *admin.Menu) bool {
+func AddMenu (menu *model.Menu) bool {
 
 	affected, err := model.DB().Table("menu").Insert(menu)
 
@@ -71,7 +70,7 @@ func AddMenu (menu *admin.Menu) bool {
 }
 
 // 修改菜单
-func UpdateMenu (menu *admin.Menu) bool {
+func UpdateMenu (menu *model.Menu) bool {
 
 	affected, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(menu)
 	if err != nil || affected <= 0 {
@@ -85,7 +84,7 @@ func UpdateMenu (menu *admin.Menu) bool {
 // 删除菜单
 func DelMenu (id int) bool {
 
-	affected, err := model.DB().Table("menu").Where("id = ?", id).Delete(&admin.Menu{})
+	affected, err := model.DB().Table("menu").Where("id = ?", id).Delete(&model.Menu{})
 	if err != nil || affected <= 0 {
 		return false
 	}
@@ -94,7 +93,7 @@ func DelMenu (id int) bool {
 }
 
 // 无限级 tree 类型菜单
-func MenuToTree (menus []admin.Menu, parentId int) *[]MenuChildren {
+func MenuToTree (menus []model.Menu, parentId int) *[]MenuChildren {
 
 	var menusTree []MenuChildren
 
