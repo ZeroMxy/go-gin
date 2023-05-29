@@ -13,3 +13,9 @@ type Admin struct {
 	Remark   string `json:"remark"`
 	Status   int    `json:"status"`
 }
+
+type AdminRole struct {
+	Admin
+	RoleId int `json:"roleId"`
+	Role Role `json:"role"`
+}

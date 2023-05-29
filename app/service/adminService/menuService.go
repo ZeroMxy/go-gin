@@ -2,7 +2,6 @@ package adminService
 
 import (
 	"go-gin/app/model"
-	"go-gin/core/log"
 )
 
 type MenuChildren struct {
@@ -15,17 +14,17 @@ func MenuList (name string, status int) *[]model.Menu {
 
 	var menus []model.Menu
 
-	menusSql := model.DB().Table("menu")
+	sql := model.DB().Table("menu")
 
 	if name != "" {
-		menusSql.Where("name lile ?", "%" + name + "%")
+		sql.Where("name lile ?", "%" + name + "%")
 	}
 
 	if status > 0 {
-		menusSql.Where("status = ?", status)
+		sql.Where("status = ?", status)
 	}
 
-	menusSql.Find(&menus)
+	sql.Find(&menus)
 
 	return &menus
 }
@@ -34,61 +33,56 @@ func MenuList (name string, status int) *[]model.Menu {
 func MenuDetail (id, parentId int, name string) *model.Menu {
 
 	var menu model.Menu
-	menuSql := model.DB().Table("menu")
+	sql := model.DB().Table("menu")
 
 	if id > 0 {
-		menuSql.Where("id = ?", id)
+		sql.Where("id = ?", id)
 	}
 
 	if parentId > 0 {
-		menuSql.Where("parentId = ?", parentId)
+		sql.Where("parentId = ?", parentId)
 	}
 
 	if name != "" {
-		menuSql.Where("name = ?", name)
+		sql.Where("name = ?", name)
 	}
 
-	_, err := menuSql.Get(&menu)
-	if err != nil {
-		return nil
-	}
+	sql.Get(&menu)
 
 	return &menu
 }
 
 // 新增菜单
-func AddMenu (menu *model.Menu) bool {
+func AddMenu (menu *model.Menu) (bool, error) {
 
 	_, err := model.DB().Table("menu").Insert(menu)
 	if err != nil {
-		log.Error(err)
-		return false
+		return false, err
 	}
 
-	return true
+	return true, nil
 }
 
 // 修改菜单
-func UpdateMenu (menu *model.Menu) bool {
+func UpdateMenu (menu *model.Menu) (bool, error) {
 
 	_, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(menu)
 	if err != nil {
-		log.Error(err)
-		return false
+		return false, err
 	}
 
-	return true
+	return true, nil
 }
 
 // 删除菜单
-func DelMenu (id int) bool {
+func DelMenu (id int) (bool, error) {
 
 	_, err := model.DB().Table("menu").Where("id = ?", id).Delete(&model.Menu{})
 	if err != nil {
-		return false
+		return false, err
 	}
 
-	return true
+	return true, nil
 }
 
 // 无限级 tree 类型菜单
@@ -100,7 +94,7 @@ func MenuToTree (menus []model.Menu, parentId int) *[]MenuChildren {
 		// 循环中找到子级
 		if value.ParentId == parentId {
 			// 获取子级菜单
-			var children = MenuToTree(menus, value.Id)
+			children := MenuToTree(menus, value.Id)
 			var menuTree MenuChildren
 			// 初始化赋值
 			menuTree.Id = value.Id

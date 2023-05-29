@@ -65,7 +65,7 @@ func (*MenuController) AddMenu (context *gin.Context) {
 		return
 	}
 
-	menu := adminService.AddMenu(&model.Menu {
+	menu, err := adminService.AddMenu(&model.Menu {
 		ParentId: 	parentId,
 		Name: 		name,
 		Type: 		menuType,
@@ -77,7 +77,10 @@ func (*MenuController) AddMenu (context *gin.Context) {
 		Remark: 	remark,
 		Status: 	status,
 	})
-
+	if err != nil {
+		response.Fail(context, err.Error())
+		return
+	}
 	if !menu {
 		response.Fail(context, "添加失败")
 		return
@@ -123,7 +126,11 @@ func (*MenuController) UpdateMenu (context *gin.Context) {
 		Status: 	status,
 	}
 	menu.Id = id
-	result := adminService.UpdateMenu(&menu)
+	result, err := adminService.UpdateMenu(&menu)
+	if err != nil {
+		response.Fail(context, err.Error())
+		return
+	}
 	if !result {
 		response.Fail(context, "更新失败")
 		return
@@ -142,13 +149,17 @@ func (*MenuController) DelMenu (context *gin.Context) {
 		return
 	}
 
-	var menuChildren = adminService.MenuDetail(0, id, "")
+	menuChildren := adminService.MenuDetail(0, id, "")
 	if menuChildren != nil {
 		response.Fail(context, "存在下级菜单")
 		return
 	}
 
-	var result = adminService.DelMenu(id)
+	result, err := adminService.DelMenu(id)
+	if err != nil {
+		response.Fail(context, err.Error())
+		return
+	}
 	if !result {
 		response.Fail(context, "删除失败")
 		return
