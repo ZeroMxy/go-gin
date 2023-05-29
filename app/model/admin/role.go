@@ -10,3 +10,4 @@ type Role struct {
 	Reamrk      string `json:"reamrk"`
 	Status      int    `json:"status"`
 }
+

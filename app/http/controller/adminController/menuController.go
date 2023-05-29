@@ -47,6 +47,7 @@ func (*MenuController) AddMenu (context *gin.Context) {
 	redirect 		:= context.Query("redirect")
 	component 		:= context.Query("component")
 	key 			:= context.Query("key")
+	remark 			:= context.Query("remark")
 	menuType, _ 	:= strconv.Atoi(context.Query("type"))
 
 	if name == "" {
@@ -73,6 +74,7 @@ func (*MenuController) AddMenu (context *gin.Context) {
 		Redirect: 	redirect,
 		Component: 	component,
 		Key: 		key,
+		Remark: 	remark,
 		Status: 	status,
 	})
 
@@ -97,6 +99,7 @@ func (*MenuController) UpdateMenu (context *gin.Context) {
 	redirect 		:= context.Query("redirect")
 	component 		:= context.Query("component")
 	key 			:= context.Query("key")
+	remark 			:= context.Query("remark")
 	menuType, _ 	:= strconv.Atoi(context.Query("type"))
 
 	if name != "" {
@@ -116,6 +119,7 @@ func (*MenuController) UpdateMenu (context *gin.Context) {
 		Redirect: 	redirect,
 		Component: 	component,
 		Key: 		key,
+		Remark: 	remark,
 		Status: 	status,
 	}
 	menu.Id = id

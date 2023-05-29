@@ -15,8 +15,3 @@ type Menu struct {
 	Remark    string `json:"remark"`
 	Status    int    `json:"status"`
 }
-
-type MenuChildren struct {
-	Menu
-	Children []MenuChildren `json:"children"`
-}

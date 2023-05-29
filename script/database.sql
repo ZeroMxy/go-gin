@@ -48,7 +48,7 @@ CREATE TABLE `menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='菜单表';
 
-CREATE TABLE `userRole` (
+CREATE TABLE `userHasRole` (
   `id` int NOT NULL AUTO_INCREMENT,
   `userId` int DEFAULT '0' COMMENT '用户id',
   `roleId` int DEFAULT '0' COMMENT '角色id',
@@ -58,7 +58,7 @@ CREATE TABLE `userRole` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='用户&角色表';
 
-CREATE TABLE `roleMenu` (
+CREATE TABLE `roleHasMenu` (
   `id` int NOT NULL AUTO_INCREMENT,
   `roleId` int DEFAULT '0' COMMENT '角色id',
   `menuId` int DEFAULT '0' COMMENT '菜单id',

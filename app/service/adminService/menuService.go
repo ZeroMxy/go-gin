@@ -6,6 +6,11 @@ import (
 	"go-gin/core/log"
 )
 
+type MenuChildren struct {
+	admin.Menu
+	Children []MenuChildren `json:"children"`
+}
+
 // 菜单列表
 func MenuList (name string, status int) *[]admin.Menu {
 
@@ -14,10 +19,10 @@ func MenuList (name string, status int) *[]admin.Menu {
 	menusSql := model.DB().Table("menu")
 
 	if name != "" {
-		menusSql.Where("name lile ?", "%"+name+"%")
+		menusSql.Where("name lile ?", "%" + name + "%")
 	}
 
-	if status > -1 {
+	if status > 0 {
 		menusSql.Where("status = ?", status)
 	}
 
@@ -89,16 +94,16 @@ func DelMenu (id int) bool {
 }
 
 // 无限级 tree 类型菜单
-func MenuToTree (menus []admin.Menu, parentId int) *[]admin.MenuChildren {
+func MenuToTree (menus []admin.Menu, parentId int) *[]MenuChildren {
 
-	var menusTree []admin.MenuChildren
+	var menusTree []MenuChildren
 
 	for _, value := range menus {
 		// 循环中找到子级
 		if value.ParentId == parentId {
 			// 获取子级菜单
 			var children = MenuToTree(menus, value.Id)
-			var menuTree admin.MenuChildren
+			var menuTree MenuChildren
 			// 初始化赋值
 			menuTree.Id = value.Id
 			menuTree.ParentId = value.ParentId
@@ -109,6 +114,7 @@ func MenuToTree (menus []admin.Menu, parentId int) *[]admin.MenuChildren {
 			menuTree.Redirect = value.Redirect
 			menuTree.Component = value.Component
 			menuTree.Key = value.Key
+			menuTree.Remark = value.Remark
 			menuTree.Status = value.Status
 			menuTree.CreatedAt = value.CreatedAt
 			menuTree.UpdatedAt = value.UpdatedAt
