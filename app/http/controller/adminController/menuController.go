@@ -20,7 +20,7 @@ func (*MenuController) MenuList (context *gin.Context) {
 	menus := adminService.MenuList(name, status)
 
 	menusTree := adminService.MenuToTree(*menus, 0)
-	
+
 	response.Success(context, menusTree)
 	return 
 }

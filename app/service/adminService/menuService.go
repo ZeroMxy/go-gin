@@ -102,6 +102,7 @@ func MenuToTree (menus []admin.Menu, parentId int) *[]admin.MenuChildren {
 			// 初始化赋值
 			menuTree.Id = value.Id
 			menuTree.ParentId = value.ParentId
+			menuTree.Type = value.Type
 			menuTree.Name = value.Name
 			menuTree.Icon = value.Icon
 			menuTree.Path = value.Path
