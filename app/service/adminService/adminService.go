@@ -3,43 +3,48 @@ package adminService
 import (
 	"errors"
 	"go-gin/app/model"
-
 	"xorm.io/xorm"
 )
 
 // 后台用户列表
 func AdminList (username, nickname, phone string) *xorm.Session {
 
-	sql := model.DB().Table("admin")
+	sql := model.DB().Table("admin").Omit("admin.password").
+			Select("admin.*, role.id as roleId, role.name as roleName").
+			Join("left", "adminHasRole", "adminHasRole.adminId = admin.id").
+			Join("left", "role", "role.id = adminHasRole.roleId")
 
 	if username != "" {
-		sql.Where("username like ?", "%" + username + "%")
+		sql = sql.Where("admin.username like ?", "%" + username + "%")
 	}
 
 	if nickname != "" {
-		sql.Where("nickname like ?", "%" + nickname + "%")
+		sql = sql.Where("admin.nickname like ?", "%" + nickname + "%")
 	}
 
 	if phone != "" {
-		sql.Where("phone like ?", "%" + phone + "%")
+		sql = sql.Where("admin.phone like ?", "%" + phone + "%")
 	}
 
 	return sql
 }
 
 // 后台用户详情
-func AdminDetail (id int, username string) *model.Admin {
+func AdminDetail (id int, username string) *model.AdminRole {
 
-	var admin model.Admin
+	var admin model.AdminRole
 
-	sql := model.DB().Table("admin")
+	sql := model.DB().Table("admin").Omit("admin.password").
+			Select("admin.*, role.id as roleId, role.name as roleName").
+			Join("left", "adminHasRole", "adminHasRole.adminId = admin.id").
+			Join("left", "role", "role.id = adminHasRole.roleId")
 
 	if id > 0 {
-		sql.Where("id = ?", id)
+		sql = sql.Where("admin.id = ?", id)
 	}
 
 	if username != "" {
-		sql.Where("username = ?", username)
+		sql = sql.Where("admin.username = ?", username)
 	}
 
 	sql.Get(&admin)
@@ -54,24 +59,28 @@ func AddAdmin (adminRole *model.AdminRole) (bool, error) {
 	defer session.Close()
 
 	if err := session.Begin(); err != nil {
+		session.Rollback()
 		return false, err
 	}
 
 	admin := adminRole.Admin
-	_, err := session.Table("admin").Insert(admin)
-	if err != nil {
+	affecte, err := session.Table("admin").InsertOne(&admin)
+	if affecte <= 0 || err != nil {
+		session.Rollback()
 		return false, err
 	}
-
-	_, err = session.Table("adminHasRole").Insert(&model.AdminHasRole {
+	
+	_, err = session.Table("adminHasRole").InsertOne(&model.AdminHasRole {
 		AdminId: admin.Id,
 		RoleId: adminRole.RoleId,
 	})
 	if err != nil {
+		session.Rollback()
 		return false, err
 	}
 
 	if err := session.Commit(); err != nil {
+		session.Rollback()
 		return false, err
 	}
 
@@ -85,32 +94,36 @@ func UpdateAdmin (adminRole *model.AdminRole) (bool, error) {
 	defer session.Close()
 
 	if err := session.Begin(); err != nil {
+		session.Rollback()
 		return false, err
 	}
 
 	admin := adminRole.Admin
-	_, err := session.Table("admin").Where("id = ?", admin.Id).Update(admin)
+	_, err := session.Table("admin").Where("id = ?", admin.Id).Update(&admin)
 	if err != nil {
+		session.Rollback()
 		return false, err
 	}
 	
 	var adminHasRole model.AdminHasRole
 	model.DB().Table("adminHasRole").Where("adminId = ?", admin.Id).Get(&adminHasRole)
 	if adminHasRole.Id <= 0 {
-		_, err = session.Table("adminHasRole").Insert(&model.AdminHasRole {
+		_, err = session.Table("adminHasRole").InsertOne(&model.AdminHasRole {
 			AdminId: admin.Id,
 			RoleId: adminRole.RoleId,
 		})
 	} else {
 		adminHasRole.RoleId = adminRole.RoleId
-		_, err = session.Table("adminHasRole").Update(adminHasRole)
+		_, err = session.Table("adminHasRole").Update(&adminHasRole)
 	}
 
 	if err != nil {
+		session.Rollback()
 		return false, err
 	}
 
 	if err := session.Commit(); err != nil {
+		session.Rollback()
 		return false, err
 	}
 

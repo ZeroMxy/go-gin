@@ -7,7 +7,7 @@ CREATE TABLE `admin` (
   `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '邮箱',
   `gender` tinyint DEFAULT '0' COMMENT '性别：1男；2女',
   `age` tinyint DEFAULT '0' COMMENT '年龄',
-  `avatar` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '头像',
+  `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '头像',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '备注',
   `status` tinyint DEFAULT '1' COMMENT '状态：0禁用；1启用',
   `createdAt` datetime DEFAULT NULL COMMENT '创建时间',

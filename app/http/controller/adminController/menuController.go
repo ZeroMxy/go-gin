@@ -1,4 +1,4 @@
-package admincontroller
+package adminController
 
 import (
 	"go-gin/app/model"
@@ -144,10 +144,6 @@ func (*MenuController) UpdateMenu (context *gin.Context) {
 func (*MenuController) DelMenu (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
-	if id <= 0 {
-		response.Fail(context, "删除失败")
-		return
-	}
 
 	menuChildren := adminService.MenuDetail(0, id, "")
 	if menuChildren != nil {

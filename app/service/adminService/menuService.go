@@ -17,11 +17,11 @@ func MenuList (name string, status int) *[]model.Menu {
 	sql := model.DB().Table("menu")
 
 	if name != "" {
-		sql.Where("name lile ?", "%" + name + "%")
+		sql = sql.Where("name lile ?", "%" + name + "%")
 	}
 
 	if status > 0 {
-		sql.Where("status = ?", status)
+		sql = sql.Where("status = ?", status)
 	}
 
 	sql.Find(&menus)
@@ -36,15 +36,15 @@ func MenuDetail (id, parentId int, name string) *model.Menu {
 	sql := model.DB().Table("menu")
 
 	if id > 0 {
-		sql.Where("id = ?", id)
+		sql = sql.Where("id = ?", id)
 	}
 
 	if parentId > 0 {
-		sql.Where("parentId = ?", parentId)
+		sql = sql.Where("parentId = ?", parentId)
 	}
 
 	if name != "" {
-		sql.Where("name = ?", name)
+		sql = sql.Where("name = ?", name)
 	}
 
 	sql.Get(&menu)
@@ -55,7 +55,7 @@ func MenuDetail (id, parentId int, name string) *model.Menu {
 // 新增菜单
 func AddMenu (menu *model.Menu) (bool, error) {
 
-	_, err := model.DB().Table("menu").Insert(menu)
+	_, err := model.DB().Table("menu").InsertOne(&menu)
 	if err != nil {
 		return false, err
 	}
@@ -66,7 +66,7 @@ func AddMenu (menu *model.Menu) (bool, error) {
 // 修改菜单
 func UpdateMenu (menu *model.Menu) (bool, error) {
 
-	_, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(menu)
+	_, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(&menu)
 	if err != nil {
 		return false, err
 	}
