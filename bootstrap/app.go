@@ -22,6 +22,10 @@ func (*App) Run () {
 	// 初始化 gin
 	app := gin.New()
 
+	// Set mode
+	// 设置模式
+	gin.SetMode(config.App["mode"])
+
 	// Use the default recovery
 	// 使用默认的 recovery
 	app.Use(gin.Recovery())
