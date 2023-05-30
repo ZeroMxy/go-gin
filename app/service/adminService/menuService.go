@@ -4,10 +4,7 @@ import (
 	"go-gin/app/model"
 )
 
-type MenuChildren struct {
-	model.Menu
-	Children []MenuChildren `json:"children"`
-}
+
 
 // 菜单列表
 func MenuList (name string, status int) *[]model.Menu {
@@ -86,16 +83,16 @@ func DelMenu (id int) (bool, error) {
 }
 
 // 无限级 tree 类型菜单
-func MenuToTree (menus []model.Menu, parentId int) *[]MenuChildren {
+func MenuToTree (menus []model.Menu, parentId int) *[]model.MenuChildren {
 
-	var menusTree []MenuChildren
+	var menusTree []model.MenuChildren
 
 	for _, value := range menus {
 		// 循环中找到子级
 		if value.ParentId == parentId {
 			// 获取子级菜单
 			children := MenuToTree(menus, value.Id)
-			var menuTree MenuChildren
+			var menuTree model.MenuChildren
 			// 初始化赋值
 			menuTree.Id = value.Id
 			menuTree.ParentId = value.ParentId

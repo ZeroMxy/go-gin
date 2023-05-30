@@ -8,3 +8,8 @@ type Role struct {
 	Remark      string `json:"remark"`
 	Status      int    `json:"status"`
 }
+
+type RoleMenu struct {
+	Role `xorm:"extends"`
+	Menus []MenuChildren `json:"menus"`
+}

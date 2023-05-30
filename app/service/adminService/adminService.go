@@ -64,19 +64,21 @@ func AddAdmin (adminRole *model.AdminRole) (bool, error) {
 	}
 
 	admin := adminRole.Admin
-	affecte, err := session.Table("admin").InsertOne(&admin)
-	if affecte <= 0 || err != nil {
+	_, err := session.Table("admin").InsertOne(&admin)
+	if err != nil {
 		session.Rollback()
 		return false, err
 	}
 	
-	_, err = session.Table("adminHasRole").InsertOne(&model.AdminHasRole {
-		AdminId: admin.Id,
-		RoleId: adminRole.RoleId,
-	})
-	if err != nil {
-		session.Rollback()
-		return false, err
+	if adminRole.RoleId > 0 {
+		_, err = session.Table("adminHasRole").InsertOne(&model.AdminHasRole {
+			AdminId: admin.Id,
+			RoleId: adminRole.RoleId,
+		})
+		if err != nil {
+			session.Rollback()
+			return false, err
+		}
 	}
 
 	if err := session.Commit(); err != nil {
