@@ -7,6 +7,13 @@ import (
 	"xorm.io/xorm"
 )
 
+type PKIncrModel struct {
+	Id        int        `json:"id" xorm:"pk autoincr"`
+	CreatedAt FormatTime `json:"createdAt" xorm:"created"`
+	UpdatedAt FormatTime `json:"updatedAt" xorm:"updated"`
+	DeletedAt FormatTime `json:"deletedAt" xorm:"deleted"`
+}
+
 type Model struct {
 	Id        int        `json:"id"`
 	CreatedAt FormatTime `json:"createdAt" xorm:"created"`
