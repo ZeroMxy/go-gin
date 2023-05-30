@@ -34,7 +34,7 @@ func AdminDetail (id int, username string) *model.AdminRole {
 
 	var admin model.AdminRole
 
-	sql := model.DB().Table("admin").Omit("admin.password").
+	sql := model.DB().Table("admin").
 			Select("admin.*, role.id as roleId, role.name as roleName").
 			Join("left", "adminHasRole", "adminHasRole.adminId = admin.id").
 			Join("left", "role", "role.id = adminHasRole.roleId")
@@ -106,17 +106,22 @@ func UpdateAdmin (adminRole *model.AdminRole) (bool, error) {
 	}
 	
 	var adminHasRole model.AdminHasRole
-	model.DB().Table("adminHasRole").Where("adminId = ?", admin.Id).Get(&adminHasRole)
-	if adminHasRole.Id <= 0 {
-		_, err = session.Table("adminHasRole").InsertOne(&model.AdminHasRole {
-			AdminId: admin.Id,
-			RoleId: adminRole.RoleId,
-		})
-	} else {
-		adminHasRole.RoleId = adminRole.RoleId
-		_, err = session.Table("adminHasRole").Update(&adminHasRole)
+	// 绑定角色
+	if adminRole.RoleId > 0 {
+		model.DB().Table("adminHasRole").Where("adminId = ?", admin.Id).Get(&adminHasRole)
+		// 未绑定新增
+		if adminHasRole == (model.AdminHasRole {}) {
+			_, err = session.Table("adminHasRole").InsertOne(&model.AdminHasRole {
+				AdminId: admin.Id,
+				RoleId: adminRole.RoleId,
+			})
+			// 已绑定但角色不同，则修改
+		} else if adminHasRole.RoleId != adminRole.RoleId {
+			adminHasRole.RoleId = adminRole.RoleId
+			_, err = session.Table("adminHasRole").Update(&adminHasRole)
+		}
 	}
-
+	
 	if err != nil {
 		session.Rollback()
 		return false, err
@@ -133,12 +138,33 @@ func UpdateAdmin (adminRole *model.AdminRole) (bool, error) {
 // 删除后台用户
 func DelAdmin (id int) (bool, error) {
 
-	if admin := AdminDetail(id, ""); admin == nil {
+	admin := AdminDetail(id, "")
+	if admin == nil {
 		return false, errors.New("用户不存在")
 	}
 
-	_, err := model.DB().Table("admin").Where("id = ?", id).Delete(&model.Admin {})
+	session := model.DB().NewSession()
+	defer session.Close()
+
+	if err := session.Begin(); err != nil {
+		session.Rollback()
+		return false, err
+	}
+
+	_, err := session.Table("admin").Where("id = ?", id).Delete(&model.Admin {})
 	if err != nil {
+		session.Rollback()
+		return false, err
+	}
+
+	var adminHasRole model.AdminHasRole
+	model.DB().Table("adminHasRole").Where("adminId = ?", admin.Id).Get(&adminHasRole)
+	if adminHasRole != (model.AdminHasRole {}) {
+		session.Table("adminHasRole").Where("adminId = ?", admin.Id).Delete(&model.AdminHasRole {})
+	}
+
+	if err := session.Commit(); err != nil {
+		session.Rollback()
 		return false, err
 	}
 
