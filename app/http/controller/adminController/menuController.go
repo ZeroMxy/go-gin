@@ -107,7 +107,7 @@ func (*MenuController) UpdateMenu (context *gin.Context) {
 
 	if name != "" {
 		menuInfo := adminService.MenuDetail(0, 0, name)
-		if *menuInfo != (model.Menu {})  && menuInfo.Id != id {
+		if menuInfo.Id > 0 && menuInfo.Id != id {
 			response.Fail(context, "菜单名已存在")
 			return
 		}

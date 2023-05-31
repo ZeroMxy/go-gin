@@ -101,7 +101,7 @@ func UpdateAdmin (adminRole *model.AdminRole) (bool, error) {
 	}
 
 	admin := adminRole.Admin
-	_, err := session.Table("admin").Where("id = ?", admin.Id).Update(&admin)
+	_, err := session.Table("admin").Where("id = ?", admin.Id).Update(admin)
 	if err != nil {
 		session.Rollback()
 		return false, err
@@ -112,7 +112,7 @@ func UpdateAdmin (adminRole *model.AdminRole) (bool, error) {
 	if adminRole.RoleId > 0 {
 		model.DB().Table("adminHasRole").Where("adminId = ?", admin.Id).Get(&adminHasRole)
 		// 未绑定新增
-		if adminHasRole == (model.AdminHasRole {}) {
+		if adminHasRole.Id <= 0 {
 			_, err = session.Table("adminHasRole").InsertOne(&model.AdminHasRole {
 				AdminId: admin.Id,
 				RoleId: adminRole.RoleId,
@@ -161,7 +161,7 @@ func DelAdmin (id int) (bool, error) {
 
 	var adminHasRole model.AdminHasRole
 	model.DB().Table("adminHasRole").Where("adminId = ?", admin.Id).Get(&adminHasRole)
-	if adminHasRole != (model.AdminHasRole {}) {
+	if adminHasRole.Id > 0 {
 		session.Table("adminHasRole").Where("adminId = ?", admin.Id).Delete(&model.AdminHasRole {})
 	}
 

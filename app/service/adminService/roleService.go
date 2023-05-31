@@ -2,13 +2,15 @@ package adminService
 
 import (
 	"go-gin/app/model"
+	"strconv"
+	"strings"
 
 	"xorm.io/xorm"
 )
 
 // 角色列表
 func RoleList (name string, status int) *xorm.Session {
-
+	
 	sql := model.DB().Table("role").Asc("sort")
 
 	if name != "" {
@@ -23,7 +25,7 @@ func RoleList (name string, status int) *xorm.Session {
 }
 
 // 角色详情
-func RoleDetail (id int, mark string) *model.Role {
+func RoleDetail (id int, name, mark string) *model.Role {
 
 	var role model.Role
 
@@ -33,10 +35,14 @@ func RoleDetail (id int, mark string) *model.Role {
 		sql = sql.Where("id = ?", id)
 	}
 
+	if name != "" {
+		sql = sql.Where("name = ?", name)
+	}
+
 	if mark != "" {
 		sql = sql.Where("mark = ?", mark)
 	}
-
+	
 	sql.Get(&role)
 
 	return &role
@@ -58,7 +64,7 @@ func RoleSelect (name string) *[]model.Role {
 }
 
 // 新增角色
-func AddRole (role *model.Role, roleHasMenus *[]model.RoleHasMenu) (bool, error) {
+func AddRole (role *model.Role, menuIds string) (bool, error) {
 	session := model.DB().NewSession()
 	defer session.Close()
 
@@ -73,7 +79,17 @@ func AddRole (role *model.Role, roleHasMenus *[]model.RoleHasMenu) (bool, error)
 		return false, err
 	}
 
-	if len(*roleHasMenus) > 0 {
+	var roleHasMenus []model.RoleHasMenu
+	if menuIds != "" {
+		menuIdsSlice := strings.Split(menuIds, ",")
+		for _, menuId := range menuIdsSlice {
+			menuIdInt, _ := strconv.Atoi(menuId)
+			roleHasMenus = append(roleHasMenus, model.RoleHasMenu {
+				RoleId: role.Id,
+				MenuId: menuIdInt,
+			})
+		}
+		// 多条数据插入
 		_, err := session.Table("roleHasMenu").Insert(&roleHasMenus)
 		if err != nil {
 			session.Rollback()
@@ -90,7 +106,7 @@ func AddRole (role *model.Role, roleHasMenus *[]model.RoleHasMenu) (bool, error)
 }
 
 // 更新角色
-func UpdateRole (role *model.Role, roleHasMenus *[]model.RoleHasMenu) (bool, error) {
+func UpdateRole (role *model.Role, menuIds string) (bool, error) {
 
 	session := model.DB().NewSession()
 	defer session.Close()
@@ -100,7 +116,7 @@ func UpdateRole (role *model.Role, roleHasMenus *[]model.RoleHasMenu) (bool, err
 		return false, err
 	}
 
-	_, err := session.Table("role").Where("id = ?", role.Id).Update(&role)
+	_, err := session.Table("role").Where("id = ?", role.Id).Update(role)
 	if err != nil {
 		session.Rollback()
 		return false, err
@@ -113,8 +129,17 @@ func UpdateRole (role *model.Role, roleHasMenus *[]model.RoleHasMenu) (bool, err
 		return false, err
 	}
 
-	// 添加新权限关联
-	if len(*roleHasMenus) > 0 {
+	var roleHasMenus []model.RoleHasMenu
+	if menuIds != "" {
+		menuIdsSlice := strings.Split(menuIds, ",")
+		for _, menuId := range menuIdsSlice {
+			menuIdInt, _ := strconv.Atoi(menuId)
+			roleHasMenus = append(roleHasMenus, model.RoleHasMenu {
+				RoleId: role.Id,
+				MenuId: menuIdInt,
+			})
+		}
+		// 多条数据插入
 		_, err := session.Table("roleHasMenu").Insert(&roleHasMenus)
 		if err != nil {
 			session.Rollback()

@@ -63,7 +63,7 @@ func AddMenu (menu *model.Menu) (bool, error) {
 // 修改菜单
 func UpdateMenu (menu *model.Menu) (bool, error) {
 
-	_, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(&menu)
+	_, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(menu)
 	if err != nil {
 		return false, err
 	}
@@ -80,6 +80,23 @@ func DelMenu (id int) (bool, error) {
 	}
 
 	return true, nil
+}
+
+// 根据角色 ID 查询菜单列表
+func MenuListByRoleId (roleId int) *[]model.Menu {
+
+	var menus []model.Menu
+
+	sql := model.DB().Table("roleHasMenu").Select("menu.*").
+			Join("inner", "menu", "roleHasMenu.menuId = menu.id")
+
+	if roleId > 0 {
+		sql = sql.Where("roleHasMenu.roleId = ?", roleId)
+	}
+
+	sql.Find(&menus)
+
+	return &menus
 }
 
 // 无限级 tree 类型菜单

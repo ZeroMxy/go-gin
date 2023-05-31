@@ -168,7 +168,7 @@ func (*AdminController) AdminLogin (context *gin.Context) {
 	}
 
 	admin := adminService.AdminDetail(0, username)
-	if *admin == (model.AdminRole {}) {
+	if admin.Id <= 0 {
 		response.Fail(context, "用户不存在")
 		return
 	}

@@ -15,7 +15,7 @@ type RoleController struct{}
 func (*RoleController) RoleList (context *gin.Context) {
 
 	name := context.Query("name")
-	status, _ := strconv.Atoi(context.Query("status"))
+	status, _ := strconv.Atoi(context.DefaultQuery("status", "-1"))
 	current, _ := strconv.Atoi(context.DefaultQuery("current", "1"))
 	size, _ := strconv.Atoi(context.DefaultQuery("size", "10"))
 
@@ -31,11 +31,17 @@ func (*RoleController) RoleList (context *gin.Context) {
 func (*RoleController) RoleDetail (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
-	mark := context.Query("mark")
 
-	role := adminService.RoleDetail(id, mark)
+	var roleMenus model.RoleMenu
 
-	response.Success(context, role)
+	role := adminService.RoleDetail(id, "", "")
+	menus := adminService.MenuListByRoleId(role.Id)
+	menuChildren := adminService.MenuToTree(*menus, 0)
+
+	roleMenus.Role = *role
+	roleMenus.Menus = *menuChildren
+
+	response.Success(context, roleMenus)
 	return
 }
 
@@ -53,11 +59,77 @@ func (*RoleController) RoleSelect (context *gin.Context) {
 // 新增角色
 func (*RoleController) AddRole (context *gin.Context) {
 
+	name := context.Query("name")
+	mark := context.Query("mark")
+	status, _ := strconv.Atoi(context.Query("status"))
+	sort, _ := strconv.Atoi(context.Query("sort"))
+	remark := context.Query("remark")
+	menuIds := context.Query("menuIds")
+
+	if name == "" {
+		response.Fail(context, "请填写角色名称")
+		return
+	}
+
+	if mark == "" {
+		response.Fail(context, "请填写角色值")
+		return
+	}
+
+	roleDetail := adminService.RoleDetail(0, name, mark)
+	if roleDetail.Id > 0 {
+		response.Fail(context, "角色已存在")
+		return
+	}
+
+	var role model.Role
+	role.Name = name
+	role.Mark = mark
+	role.Sort = sort
+	role.Status = status
+	role.Remark = remark
+
+	if _, err := adminService.AddRole(&role, menuIds); err != nil {
+		response.Fail(context, err.Error())
+		return
+	}
+
+	response.Success(context, nil)
+	return
 }
 
 // 更新角色
 func (*RoleController) UpdateRole (context *gin.Context) {
 
+	id, _ := strconv.Atoi(context.Query("id"))
+	name := context.Query("name")
+	mark := context.Query("mark")
+	status, _ := strconv.Atoi(context.Query("status"))
+	sort, _ := strconv.Atoi(context.Query("sort"))
+	remark := context.Query("remark")
+	menuIds := context.Query("menuIds")
+
+	roleDetail := adminService.RoleDetail(0, name, mark)
+	if roleDetail.Id > 0 && roleDetail.Id != id {
+		response.Fail(context, "角色已存在")
+		return
+	}
+
+	var role model.Role
+	role.Id = id
+	role.Name = name
+	role.Mark = mark
+	role.Sort = sort
+	role.Status = status
+	role.Remark = remark
+
+	if _, err := adminService.UpdateRole(&role, menuIds); err != nil {
+		response.Fail(context, err.Error())
+		return
+	}
+
+	response.Success(context, nil)
+	return
 }
 
 // 删除角色
