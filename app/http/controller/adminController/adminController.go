@@ -5,6 +5,7 @@ import (
 	"go-gin/app/service/adminService"
 	"go-gin/app/tool/cipher"
 	"go-gin/app/tool/token"
+	"go-gin/app/tool/user"
 	"go-gin/core/response"
 	"go-gin/core/session"
 	"strconv"
@@ -188,5 +189,16 @@ func (*AdminController) AdminLogin (context *gin.Context) {
 	}
 
 	response.Success(context, data)
+	return
+}
+
+// 后台用户拥有的菜单权限列表
+func (*AdminController) AdminMenus (context *gin.Context) {
+
+	adminRole := user.GetUser(context)
+	menus := adminService.MenuListByRoleId(adminRole.RoleId)
+	menuChildrenList := adminService.MenuToTree(*menus, 0)
+
+	response.Success(context, menuChildrenList)
 	return
 }

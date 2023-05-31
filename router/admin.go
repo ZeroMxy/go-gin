@@ -2,6 +2,7 @@ package router
 
 import (
 	"go-gin/app/http/controller/adminController"
+	"go-gin/app/http/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,14 +10,14 @@ import (
 func AdminRoute (app *gin.Engine) {
 
 	// 无需登录
-	noAuth := app.Group("admin")
+	noAuth := app.Group("")
 
 	{
 		noAuth.POST("admin/login", (&adminController.AdminController{}).AdminLogin) // 后台用户登录
 	}
 
 	// 需要登录
-	route := app.Group("admin")
+	route := app.Group("admin", (&middleware.Middleware{}).UserHandler)
 
 	{
 		// 用户管理
@@ -25,6 +26,8 @@ func AdminRoute (app *gin.Engine) {
 		route.POST("admin/add", (&adminController.AdminController{}).AddAdmin) // 新增后台用户
 		route.POST("admin/update", (&adminController.AdminController{}).UpdateAdmin) // 更新后台用户
 		route.GET("admin/del", (&adminController.AdminController{}).DelAdmin) // 删除后台用户
+		route.POST("admin/login", (&adminController.AdminController{}).AdminLogin) // 后台用户登录
+		route.GET("admin/menus", (&adminController.AdminController{}).AdminMenus) // 后台用户拥有的菜单权限列表
 
 		// 角色管理
 		route.GET("role/list", (&adminController.RoleController{}).RoleList) // 角色列表
