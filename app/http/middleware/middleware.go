@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"go-gin/core/log"
 	"go-gin/core/response"
 	"go-gin/core/session"
 
@@ -12,7 +13,7 @@ type Middleware struct{}
 func (*Middleware) UserHandler (context *gin.Context) {
 
 	token := context.Query("token")
-
+	log.Debug(token)
 	if token == "" {
 		context.Abort()
 		response.TokenFail(context)

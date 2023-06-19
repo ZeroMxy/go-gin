@@ -1,19 +1,31 @@
 package user
 
 import (
+	"encoding/json"
 	"go-gin/app/model"
-	"go-gin/app/service/adminService"
+	"go-gin/core/log"
 	"go-gin/core/session"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetUser (context *gin.Context) *model.AdminRole {
+func GetAdmin (context *gin.Context) *model.AdminRole {
 
 	token := context.Query("token")
-	id := session.Get(token).(int)
+	data := session.Get(token)
 
-	adminRole := adminService.AdminDetail(id, "")
+	dataByte, err := json.Marshal(data)
+	if err != nil {
+		log.Error(err)
+		return nil
+	}
+	
+	var admin model.AdminRole
+	// TODO: 反序列化时间失败
+	if err := json.Unmarshal(dataByte, &admin); err != nil {
+		log.Error(err)
+		return nil
+	}
 
-	return adminRole
+	return &admin
 }
