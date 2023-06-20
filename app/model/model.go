@@ -9,23 +9,23 @@ import (
 
 type PKIncrModel struct {
 	Id        int        `json:"id" xorm:"pk autoincr"`
-	CreatedAt FormatTime `json:"createdAt" xorm:"created"`
-	UpdatedAt FormatTime `json:"updatedAt" xorm:"updated"`
-	DeletedAt FormatTime `json:"deletedAt" xorm:"deleted"`
+	CreatedAt DateTime `json:"createdAt" xorm:"created"`
+	UpdatedAt DateTime `json:"updatedAt" xorm:"updated"`
+	DeletedAt DateTime `json:"deletedAt" xorm:"deleted"`
 }
 
 type Model struct {
 	Id        int        `json:"id"`
-	CreatedAt FormatTime `json:"createdAt" xorm:"created"`
-	UpdatedAt FormatTime `json:"updatedAt" xorm:"updated"`
-	DeletedAt FormatTime `json:"deletedAt" xorm:"deleted"`
+	CreatedAt DateTime `json:"createdAt" xorm:"created"`
+	UpdatedAt DateTime `json:"updatedAt" xorm:"updated"`
+	DeletedAt DateTime `json:"deletedAt" xorm:"deleted"`
 }
 
-type FormatTime time.Time
+type DateTime time.Time
 
 // Model time format conversion
 // 模型时间格式转换
-func (this FormatTime) MarshalJSON () ([]byte, error) {
+func (this DateTime) MarshalJSON () ([]byte, error) {
 
 	// Special handling is required when the return time is null
 	// 当返回时间为空时，需要进行特殊处理
@@ -33,7 +33,7 @@ func (this FormatTime) MarshalJSON () ([]byte, error) {
 		return []byte(`""`), nil
 	}
 	
-	return []byte(`"` + time.Time(this).Format("2006-01-02 15:04:05") + `"`), nil
+	return []byte(`"` + time.Time(this).Format(time.DateTime) + `"`), nil
 }
 
 // Database instance
