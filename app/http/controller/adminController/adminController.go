@@ -6,7 +6,6 @@ import (
 	"go-gin/app/tool/cipher"
 	"go-gin/app/tool/token"
 	"go-gin/app/tool/user"
-	"go-gin/core/log"
 	"go-gin/core/response"
 	"go-gin/core/session"
 	"strconv"
@@ -197,7 +196,7 @@ func (*AdminController) AdminLogin (context *gin.Context) {
 func (*AdminController) AdminMenus (context *gin.Context) {
 
 	adminRole := user.GetAdmin(context)
-	log.Debug(adminRole)
+
 	menus := adminService.MenuListByRoleId(adminRole.RoleId)
 	menuChildrenList := adminService.MenuToTree(*menus, 0)
 
