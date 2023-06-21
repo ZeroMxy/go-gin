@@ -8,14 +8,14 @@ import (
 )
 
 type PKIncrModel struct {
-	Id        int        `json:"id" xorm:"pk autoincr"`
+	Id        int      `json:"id" xorm:"pk autoincr"`
 	CreatedAt DateTime `json:"createdAt" xorm:"created"`
 	UpdatedAt DateTime `json:"updatedAt" xorm:"updated"`
 	DeletedAt DateTime `json:"deletedAt" xorm:"deleted"`
 }
 
 type Model struct {
-	Id        int        `json:"id"`
+	Id        int      `json:"id"`
 	CreatedAt DateTime `json:"createdAt" xorm:"created"`
 	UpdatedAt DateTime `json:"updatedAt" xorm:"updated"`
 	DeletedAt DateTime `json:"deletedAt" xorm:"deleted"`

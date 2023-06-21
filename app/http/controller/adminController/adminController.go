@@ -195,7 +195,7 @@ func (*AdminController) AdminLogin (context *gin.Context) {
 // 后台用户拥有的菜单权限列表
 func (*AdminController) AdminMenus (context *gin.Context) {
 
-	adminRole := user.GetAdmin(context)
+	adminRole := user.GetUser(context)
 
 	menus := adminService.MenuListByRoleId(adminRole.RoleId)
 	menuChildrenList := adminService.MenuToTree(*menus, 0)

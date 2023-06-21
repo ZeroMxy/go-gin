@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetAdmin (context *gin.Context) *model.AdminRole {
+func GetUser (context *gin.Context) *model.AdminRole {
 
 	token := context.Query("token")
 	data := session.Get(token)
