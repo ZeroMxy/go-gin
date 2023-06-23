@@ -13,10 +13,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AdminController struct{}
+type UserController struct{}
 
 // 后台用户列表
-func (*AdminController) UserList (context *gin.Context) {
+func (*UserController) UserList (context *gin.Context) {
 
 	username := context.Query("username")
 	nickname := context.Query("nickname")
@@ -34,7 +34,7 @@ func (*AdminController) UserList (context *gin.Context) {
 }
 
 // 后台用户详情
-func (*AdminController) UserDetail (context *gin.Context) {
+func (*UserController) UserDetail (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
 
@@ -45,7 +45,7 @@ func (*AdminController) UserDetail (context *gin.Context) {
 }
 
 // 新增后台用户
-func (*AdminController) AddUser (context *gin.Context) {
+func (*UserController) AddUser (context *gin.Context) {
 
 	username := context.Query("username")
 	password := context.Query("password")
@@ -90,7 +90,7 @@ func (*AdminController) AddUser (context *gin.Context) {
 }
 
 // 更新后台用户
-func (*AdminController) UpdateUser (context *gin.Context) {
+func (*UserController) UpdateUser (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
 	username := context.Query("username")
@@ -128,7 +128,7 @@ func (*AdminController) UpdateUser (context *gin.Context) {
 }
 
 // 删除后台用户
-func (*AdminController) DelUser (context *gin.Context) {
+func (*UserController) DelUser (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
 
@@ -142,7 +142,7 @@ func (*AdminController) DelUser (context *gin.Context) {
 }
 
 // 后台用户登录
-func (*AdminController) Login (context *gin.Context) {
+func (*UserController) Login (context *gin.Context) {
 
 	username := context.Query("username")
 	password := context.Query("password")
@@ -197,7 +197,7 @@ func (*AdminController) Login (context *gin.Context) {
 }
 
 // 后台用户拥有的菜单权限列表
-func (*AdminController) UserMenus (context *gin.Context) {
+func (*UserController) UserMenus (context *gin.Context) {
 
 	adminRole := user.GetUser(context)
 

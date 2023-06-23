@@ -68,3 +68,19 @@ CREATE TABLE `roleHasMenu` (
   `deletedAt` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='角色&菜单表';
+
+CREATE TABLE IF NOT EXISTS `optLog` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `userId` int NOT NULL DEFAULT '0' COMMENT '操作人',
+  `ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT 'ip地址',
+  `method` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '请求方式',
+  `path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '请求地址',
+  `status` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '状态码',
+  `agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '0' COMMENT '请求代理',
+  `req` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '请求数据',
+  `resp` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '响应数据',
+  `createdAt` datetime DEFAULT NULL COMMENT '请求时间',
+  `updatedAt` datetime DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志';

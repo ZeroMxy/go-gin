@@ -13,20 +13,20 @@ func AdminRoute (app *gin.Engine) {
 	noAuth := app.Group("")
 
 	{
-		noAuth.POST("admin/login", (&adminController.AdminController{}).Login) // 后台用户登录
+		noAuth.POST("admin/login", (&adminController.UserController{}).Login) // 后台用户登录
 	}
 
 	// 需要登录
-	route := app.Group("admin", (&middleware.Middleware{}).UserHandler)
+	route := app.Group("admin", (&middleware.Middleware{}).OptLogHandler, (&middleware.Middleware{}).UserHandler)
 
 	{
 		// 用户管理
-		route.GET("admin/list", (&adminController.AdminController{}).UserList) // 后台用户列表
-		route.GET("admin/detail", (&adminController.AdminController{}).UserDetail) // 后台用户详情
-		route.POST("admin/add", (&adminController.AdminController{}).AddUser) // 新增后台用户
-		route.POST("admin/update", (&adminController.AdminController{}).UpdateUser) // 更新后台用户
-		route.GET("admin/del", (&adminController.AdminController{}).DelUser) // 删除后台用户
-		route.GET("admin/menus", (&adminController.AdminController{}).UserMenus) // 后台用户拥有的菜单权限列表
+		route.GET("admin/list", (&adminController.UserController{}).UserList) // 后台用户列表
+		route.GET("admin/detail", (&adminController.UserController{}).UserDetail) // 后台用户详情
+		route.POST("admin/add", (&adminController.UserController{}).AddUser) // 新增后台用户
+		route.POST("admin/update", (&adminController.UserController{}).UpdateUser) // 更新后台用户
+		route.GET("admin/del", (&adminController.UserController{}).DelUser) // 删除后台用户
+		route.GET("admin/menus", (&adminController.UserController{}).UserMenus) // 后台用户拥有的菜单权限列表
 
 		// 角色管理
 		route.GET("role/list", (&adminController.RoleController{}).RoleList) // 角色列表
@@ -42,6 +42,9 @@ func AdminRoute (app *gin.Engine) {
 		route.POST("menu/add", (&adminController.MenuController{}).AddMenu) // 添加菜单
 		route.POST("menu/update", (&adminController.MenuController{}).UpdateMenu) // 更新菜单
 		route.GET("menu/del", (&adminController.MenuController{}).DelMenu) // 删除菜单
+
+		// 操作日志管理
+		route.GET("optLog/list", (&adminController.OptLogController{}).OptLogList) // 操作日志列表
 	}
 	return
 }

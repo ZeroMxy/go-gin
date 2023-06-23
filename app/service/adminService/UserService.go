@@ -9,7 +9,7 @@ import (
 // 后台用户列表
 func UserList (username, nickname, phone string) *xorm.Session {
 
-	sql := model.DB().Table("user").Omit("user.password").
+	sql := model.DB().Table("user").Desc("user.id").Omit("user.password").
 			Select("user.*, role.id as roleId, role.name as roleName").
 			Join("left", "userHasRole", "userHasRole.userId = user.id").
 			Join("left", "role", "role.id = userHasRole.roleId").
