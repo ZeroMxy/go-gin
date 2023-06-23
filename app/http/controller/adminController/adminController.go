@@ -16,7 +16,7 @@ import (
 type AdminController struct{}
 
 // 后台用户列表
-func (*AdminController) AdminList (context *gin.Context) {
+func (*AdminController) UserList (context *gin.Context) {
 
 	username := context.Query("username")
 	nickname := context.Query("nickname")
@@ -24,28 +24,28 @@ func (*AdminController) AdminList (context *gin.Context) {
 	current, _ := strconv.Atoi(context.DefaultQuery("current", "1"))
 	size, _ := strconv.Atoi(context.DefaultQuery("size", "10"))
 
-	var adminList []model.AdminRole
-	total, _ := adminService.AdminList(username, nickname, phone).Limit(size, (current - 1) * size).
-				FindAndCount(&adminList)
+	var userList []model.UserRole
+	total, _ := adminService.UserList(username, nickname, phone).Limit(size, (current - 1) * size).
+				FindAndCount(&userList)
 
 
-	response.Pager(context, adminList, int(total), current, size)
+	response.Pager(context, userList, int(total), current, size)
 	return
 }
 
 // 后台用户详情
-func (*AdminController) AdminDetail (context *gin.Context) {
+func (*AdminController) UserDetail (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
 
-	admin := adminService.AdminDetail(id, "")
+	user := adminService.UserDetail(id, "")
 
-	response.Success(context, admin)
+	response.Success(context, user)
 	return
 }
 
 // 新增后台用户
-func (*AdminController) AddAdmin (context *gin.Context) {
+func (*AdminController) AddUser (context *gin.Context) {
 
 	username := context.Query("username")
 	password := context.Query("password")
@@ -67,19 +67,19 @@ func (*AdminController) AddAdmin (context *gin.Context) {
 		return
 	}
 
-	var adminRole model.AdminRole
-	adminRole.Username = username
-	adminRole.Password = cipher.Encrypt(password)
-	adminRole.Nickname = nickname
-	adminRole.Phone = phone
-	adminRole.Email = email
-	adminRole.Gender = gender
-	adminRole.Age = age
-	adminRole.Avatar = avatar
-	adminRole.Remark = remark
-	adminRole.RoleId = roleId
+	var userRole model.UserRole
+	userRole.Username = username
+	userRole.Password = cipher.Encrypt(password)
+	userRole.Nickname = nickname
+	userRole.Phone = phone
+	userRole.Email = email
+	userRole.Gender = gender
+	userRole.Age = age
+	userRole.Avatar = avatar
+	userRole.Remark = remark
+	userRole.RoleId = roleId
 
-	_, err := adminService.AddAdmin(&adminRole)
+	_, err := adminService.AddUser(&userRole)
 	if err != nil {
 		response.Fail(context, err.Error())
 		return
@@ -90,7 +90,7 @@ func (*AdminController) AddAdmin (context *gin.Context) {
 }
 
 // 更新后台用户
-func (*AdminController) UpdateAdmin (context *gin.Context) {
+func (*AdminController) UpdateUser (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
 	username := context.Query("username")
@@ -104,20 +104,20 @@ func (*AdminController) UpdateAdmin (context *gin.Context) {
 	remark := context.Query("remark")
 	roleId, _ := strconv.Atoi(context.Query("roleId"))
 
-	var adminRole model.AdminRole
-	adminRole.Id = id
-	adminRole.Username = username
-	adminRole.Password = cipher.Encrypt(password)
-	adminRole.Nickname = nickname
-	adminRole.Phone = phone
-	adminRole.Email = email
-	adminRole.Gender = gender
-	adminRole.Age = age
-	adminRole.Avatar = avatar
-	adminRole.Remark = remark
-	adminRole.RoleId = roleId
+	var userRole model.UserRole
+	userRole.Id = id
+	userRole.Username = username
+	userRole.Password = cipher.Encrypt(password)
+	userRole.Nickname = nickname
+	userRole.Phone = phone
+	userRole.Email = email
+	userRole.Gender = gender
+	userRole.Age = age
+	userRole.Avatar = avatar
+	userRole.Remark = remark
+	userRole.RoleId = roleId
 
-	_, err := adminService.UpdateAdmin(&adminRole)
+	_, err := adminService.UpdateUser(&userRole)
 	if err != nil {
 		response.Fail(context, err.Error())
 		return
@@ -128,11 +128,11 @@ func (*AdminController) UpdateAdmin (context *gin.Context) {
 }
 
 // 删除后台用户
-func (*AdminController) DelAdmin (context *gin.Context) {
+func (*AdminController) DelUser (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
 
-	if _, err := adminService.DelAdmin(id); err != nil {
+	if _, err := adminService.DelUser(id); err != nil {
 		response.Fail(context, err.Error())
 		return
 	}
@@ -142,7 +142,7 @@ func (*AdminController) DelAdmin (context *gin.Context) {
 }
 
 // 后台用户登录
-func (*AdminController) AdminLogin (context *gin.Context) {
+func (*AdminController) Login (context *gin.Context) {
 
 	username := context.Query("username")
 	password := context.Query("password")
@@ -168,23 +168,27 @@ func (*AdminController) AdminLogin (context *gin.Context) {
 		return
 	}
 
-	admin := adminService.AdminDetail(0, username)
-	if admin.Id <= 0 {
+	user := adminService.UserDetail(0, username)
+	if user.Id <= 0 {
 		response.Fail(context, "用户不存在")
 		return
 	}
 
-	if !cipher.Verify(admin.Password, password) {
+	if !cipher.Verify(user.Password, password) {
 		response.Fail(context, "密码错误")
 		return
 	}
 	// 创建 token
-	token := token.Create(strconv.Itoa(admin.Id))
+	token := token.Create(strconv.Itoa(user.Id))
+	// 更新最后ip
+	user.LastIp = context.ClientIP()
+	adminService.UpdateUser(user)
+	
 	// 缓存用户信息
-	session.Set(token, admin)
+	session.Set(token, user)
 
 	data := map[string] interface {} {
-		"admin": admin,
+		"user": user,
 		"token": token,
 	}
 
@@ -193,7 +197,7 @@ func (*AdminController) AdminLogin (context *gin.Context) {
 }
 
 // 后台用户拥有的菜单权限列表
-func (*AdminController) AdminMenus (context *gin.Context) {
+func (*AdminController) UserMenus (context *gin.Context) {
 
 	adminRole := user.GetUser(context)
 

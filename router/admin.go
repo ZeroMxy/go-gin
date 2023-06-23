@@ -13,7 +13,7 @@ func AdminRoute (app *gin.Engine) {
 	noAuth := app.Group("")
 
 	{
-		noAuth.POST("admin/login", (&adminController.AdminController{}).AdminLogin) // 后台用户登录
+		noAuth.POST("admin/login", (&adminController.AdminController{}).Login) // 后台用户登录
 	}
 
 	// 需要登录
@@ -21,13 +21,12 @@ func AdminRoute (app *gin.Engine) {
 
 	{
 		// 用户管理
-		route.GET("admin/list", (&adminController.AdminController{}).AdminList) // 后台用户列表
-		route.GET("admin/detail", (&adminController.AdminController{}).AdminDetail) // 后台用户详情
-		route.POST("admin/add", (&adminController.AdminController{}).AddAdmin) // 新增后台用户
-		route.POST("admin/update", (&adminController.AdminController{}).UpdateAdmin) // 更新后台用户
-		route.GET("admin/del", (&adminController.AdminController{}).DelAdmin) // 删除后台用户
-		route.POST("admin/login", (&adminController.AdminController{}).AdminLogin) // 后台用户登录
-		route.GET("admin/menus", (&adminController.AdminController{}).AdminMenus) // 后台用户拥有的菜单权限列表
+		route.GET("admin/list", (&adminController.AdminController{}).UserList) // 后台用户列表
+		route.GET("admin/detail", (&adminController.AdminController{}).UserDetail) // 后台用户详情
+		route.POST("admin/add", (&adminController.AdminController{}).AddUser) // 新增后台用户
+		route.POST("admin/update", (&adminController.AdminController{}).UpdateUser) // 更新后台用户
+		route.GET("admin/del", (&adminController.AdminController{}).DelUser) // 删除后台用户
+		route.GET("admin/menus", (&adminController.AdminController{}).UserMenus) // 后台用户拥有的菜单权限列表
 
 		// 角色管理
 		route.GET("role/list", (&adminController.RoleController{}).RoleList) // 角色列表

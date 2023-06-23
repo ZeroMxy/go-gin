@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetUser (context *gin.Context) *model.AdminRole {
+func GetUser (context *gin.Context) *model.UserRole {
 
 	token := context.Query("token")
 	data := session.Get(token)
@@ -20,12 +20,12 @@ func GetUser (context *gin.Context) *model.AdminRole {
 		return nil
 	}
 	
-	var admin model.AdminRole
+	var user model.UserRole
 	// TODO: 反序列化时间失败
-	if err := json.Unmarshal(dataByte, &admin); err != nil {
+	if err := json.Unmarshal(dataByte, &user); err != nil {
 		log.Error(err)
 		return nil
 	}
 
-	return &admin
+	return &user
 }
