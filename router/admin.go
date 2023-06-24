@@ -21,12 +21,12 @@ func AdminRoute (app *gin.Engine) {
 
 	{
 		// 用户管理
-		route.GET("admin/list", (&adminController.UserController{}).UserList) // 后台用户列表
-		route.GET("admin/detail", (&adminController.UserController{}).UserDetail) // 后台用户详情
-		route.POST("admin/add", (&adminController.UserController{}).AddUser) // 新增后台用户
-		route.POST("admin/update", (&adminController.UserController{}).UpdateUser) // 更新后台用户
-		route.GET("admin/del", (&adminController.UserController{}).DelUser) // 删除后台用户
-		route.GET("admin/menus", (&adminController.UserController{}).UserMenus) // 后台用户拥有的菜单权限列表
+		route.GET("user/list", (&adminController.UserController{}).UserList) // 后台用户列表
+		route.GET("user/detail", (&adminController.UserController{}).UserDetail) // 后台用户详情
+		route.POST("user/add", (&adminController.UserController{}).AddUser) // 新增后台用户
+		route.POST("user/update", (&adminController.UserController{}).UpdateUser) // 更新后台用户
+		route.GET("user/del", (&adminController.UserController{}).DelUser) // 删除后台用户
+		route.GET("user/menus", (&adminController.UserController{}).UserMenus) // 后台用户拥有的菜单权限列表
 
 		// 角色管理
 		route.GET("role/list", (&adminController.RoleController{}).RoleList) // 角色列表
