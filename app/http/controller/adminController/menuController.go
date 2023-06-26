@@ -90,7 +90,7 @@ func (*MenuController) AddMenu (context *gin.Context) {
 	return
 }
 
-// 修改菜单
+// 更新菜单
 func (*MenuController) UpdateMenu (context *gin.Context) {
 
 	status, _ 		:= strconv.Atoi(context.Query("status"))

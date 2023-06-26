@@ -15,7 +15,7 @@ import (
 
 type UserController struct{}
 
-// 后台用户列表
+// 用户列表
 func (*UserController) UserList (context *gin.Context) {
 
 	username := context.Query("username")
@@ -33,7 +33,7 @@ func (*UserController) UserList (context *gin.Context) {
 	return
 }
 
-// 后台用户详情
+// 用户详情
 func (*UserController) UserDetail (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
@@ -44,7 +44,7 @@ func (*UserController) UserDetail (context *gin.Context) {
 	return
 }
 
-// 新增后台用户
+// 新增用户
 func (*UserController) AddUser (context *gin.Context) {
 
 	username := context.Query("username")
@@ -89,7 +89,7 @@ func (*UserController) AddUser (context *gin.Context) {
 	return
 }
 
-// 更新后台用户
+// 更新用户
 func (*UserController) UpdateUser (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
@@ -127,7 +127,7 @@ func (*UserController) UpdateUser (context *gin.Context) {
 	return
 }
 
-// 删除后台用户
+// 删除用户
 func (*UserController) DelUser (context *gin.Context) {
 
 	id, _ := strconv.Atoi(context.Query("id"))
@@ -141,7 +141,7 @@ func (*UserController) DelUser (context *gin.Context) {
 	return
 }
 
-// 后台用户登录
+// 用户登录
 func (*UserController) Login (context *gin.Context) {
 
 	username := context.Query("username")
@@ -196,7 +196,7 @@ func (*UserController) Login (context *gin.Context) {
 	return
 }
 
-// 后台用户拥有的菜单权限列表
+// 用户拥有的菜单权限列表
 func (*UserController) UserMenus (context *gin.Context) {
 
 	adminRole := user.GetUser(context)

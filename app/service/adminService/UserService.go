@@ -6,7 +6,7 @@ import (
 	"xorm.io/xorm"
 )
 
-// 后台用户列表
+// 用户列表
 func UserList (username, nickname, phone string) *xorm.Session {
 
 	sql := model.DB().Table("user").Desc("user.id").Omit("user.password").
@@ -30,7 +30,7 @@ func UserList (username, nickname, phone string) *xorm.Session {
 	return sql
 }
 
-// 后台用户详情
+// 用户详情
 func UserDetail (id int, username string) *model.UserRole {
 
 	var user model.UserRole
@@ -54,7 +54,7 @@ func UserDetail (id int, username string) *model.UserRole {
 	return &user
 }
 
-// 新增后台用户
+// 新增用户
 func AddUser (userRole *model.UserRole) (bool, error) {
 
 	session := model.DB().NewSession()
@@ -91,7 +91,7 @@ func AddUser (userRole *model.UserRole) (bool, error) {
 	return true, nil
 }
 
-// 修改后台用户
+// 更新用户
 func UpdateUser (userRole *model.UserRole) (bool, error) {
 
 	session := model.DB().NewSession()
@@ -119,7 +119,7 @@ func UpdateUser (userRole *model.UserRole) (bool, error) {
 				UserId: user.Id,
 				RoleId: userRole.RoleId,
 			})
-			// 已绑定但角色不同，则修改
+			// 已绑定但角色不同，则更新
 		} else if userHasRole.RoleId != userRole.RoleId {
 			userHasRole.RoleId = userRole.RoleId
 			_, err = session.Table("userHasRole").Update(&userHasRole)
@@ -139,7 +139,7 @@ func UpdateUser (userRole *model.UserRole) (bool, error) {
 	return true, nil
 }
 
-// 删除后台用户
+// 删除用户
 func DelUser (id int) (bool, error) {
 
 	user := UserDetail(id, "")

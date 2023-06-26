@@ -60,7 +60,7 @@ func AddMenu (menu *model.Menu) (bool, error) {
 	return true, nil
 }
 
-// 修改菜单
+// 更新菜单
 func UpdateMenu (menu *model.Menu) (bool, error) {
 
 	_, err := model.DB().Table("menu").Where("id = ?", menu.Id).Update(menu)

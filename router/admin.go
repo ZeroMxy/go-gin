@@ -39,9 +39,16 @@ func AdminRoute (app *gin.Engine) {
 		// 菜单管理
 		route.GET("menu/list", (&adminController.MenuController{}).MenuList) // 菜单列表
 		route.GET("menu/detail", (&adminController.MenuController{}).MenuDetail) // 菜单详情
-		route.POST("menu/add", (&adminController.MenuController{}).AddMenu) // 添加菜单
+		route.POST("menu/add", (&adminController.MenuController{}).AddMenu) // 新增菜单
 		route.POST("menu/update", (&adminController.MenuController{}).UpdateMenu) // 更新菜单
 		route.GET("menu/del", (&adminController.MenuController{}).DelMenu) // 删除菜单
+
+		// api 管理
+		route.GET("api/list", (&adminController.ApiController{}).ApiList) // api 列表
+		route.GET("api/detail", (&adminController.ApiController{}).ApiDetail) // api 详情
+		route.POST("api/add", (&adminController.ApiController{}).AddApi) // 新增 api
+		route.POST("api/update", (&adminController.ApiController{}).UpdateApi) // 更新 api
+		route.GET("api/del", (&adminController.ApiController{}).DelApi) // 删除 api
 
 		// 操作日志管理
 		route.GET("optLog/list", (&adminController.OptLogController{}).OptLogList) // 操作日志列表

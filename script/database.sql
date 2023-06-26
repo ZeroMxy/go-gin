@@ -49,6 +49,18 @@ CREATE TABLE `menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='菜单表';
 
+CREATE TABLE `permission` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `path` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '路径',
+  `method` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '请求方式',
+  `group` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '分组',
+  `description` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '描述',
+  `createdAt` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatedAt` datetime DEFAULT NULL COMMENT '更新时间',
+  `deletedAt` datetime DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='权限表';
+
 CREATE TABLE `userHasRole` (
   `id` int NOT NULL AUTO_INCREMENT,
   `userId` int DEFAULT '0' COMMENT '用户id',
@@ -68,6 +80,16 @@ CREATE TABLE `roleHasMenu` (
   `deletedAt` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='角色&菜单表';
+
+CREATE TABLE `roleHasPermission` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `roleId` int DEFAULT '0' COMMENT '角色id',
+  `permissionId` int DEFAULT '0' COMMENT '权限id',
+  `createdAt` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatedAt` datetime DEFAULT NULL COMMENT '更新时间',
+  `deletedAt` datetime DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='角色&权限表';
 
 CREATE TABLE IF NOT EXISTS `optLog` (
   `id` int NOT NULL AUTO_INCREMENT,
