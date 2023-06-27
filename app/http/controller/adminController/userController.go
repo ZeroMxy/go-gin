@@ -4,6 +4,7 @@ import (
 	"go-gin/app/model"
 	"go-gin/app/service/adminService"
 	"go-gin/app/tool/cipher"
+	"go-gin/app/tool/rbac"
 	"go-gin/app/tool/token"
 	"go-gin/app/tool/user"
 	"go-gin/core/response"
@@ -11,6 +12,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mikespook/gorbac"
 )
 
 type UserController struct{}
@@ -186,6 +188,16 @@ func (*UserController) Login (context *gin.Context) {
 	
 	// 缓存用户信息
 	session.Set(token, user)
+
+	// rbac
+	rbac := rbac.New()
+	role := gorbac.NewStdRole(strconv.Itoa(user.RoleId))
+	apiList := adminService.ApiListByRoleId(user.RoleId)
+	for _, api := range *apiList {
+		apiRbac := gorbac.NewStdPermission(api.Path)
+		role.Assign(apiRbac)
+	}
+	rbac.Add(role)
 
 	data := map[string] interface {} {
 		"user": user,

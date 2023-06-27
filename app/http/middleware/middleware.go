@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"go-gin/app/model"
 	"go-gin/app/service/adminService"
+	"go-gin/app/tool/rbac"
 	"go-gin/app/tool/user"
 	"go-gin/core/response"
 	"go-gin/core/session"
@@ -29,6 +30,16 @@ func (*Middleware) UserHandler (context *gin.Context) {
 		context.Abort()
 		response.TokenFail(context)
 		return
+	}
+
+	user := user.GetUser(context)
+	if user.RoleId != 1 && (strings.HasPrefix(context.Request.URL.Path, "/api/admin") || 
+	strings.HasPrefix(context.Request.URL.Path, "/admin")) {
+		if !rbac.CheckApi(strconv.Itoa(user.RoleId), context.Request.URL.Path) {
+			context.Abort()
+			response.Fail(context, "无权操作")
+			return
+		}
 	}
 
 	context.Next()
