@@ -14,7 +14,7 @@ require (
 	xorm.io/xorm v1.3.2
 )
 
-require github.com/mikespook/gorbac v2.3.0+incompatible // indirect
+require github.com/mikespook/gorbac v2.3.0+incompatible
 
 require (
 	github.com/bytedance/sonic v1.8.0 // indirect
